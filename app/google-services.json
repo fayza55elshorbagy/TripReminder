@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "442735924488",
+    "project_id": "tripreminder-1bff4",
+    "storage_bucket": "tripreminder-1bff4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:442735924488:android:1dd1e7d010c7165e67c8bd",
+        "android_client_info": {
+          "package_name": "com.example.tripreminder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "442735924488-10v90ul3425g9o4mjaqhbna5l4khkffg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBj9ZKa4IDaRQQyDwWIk8bSXFH_RbYzOKg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "442735924488-10v90ul3425g9o4mjaqhbna5l4khkffg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
