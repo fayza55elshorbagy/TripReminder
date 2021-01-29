@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "442735924488",
+    "firebase_url": "https://tripreminder-1bff4-default-rtdb.firebaseio.com",
     "project_id": "tripreminder-1bff4",
     "storage_bucket": "tripreminder-1bff4.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "442735924488-rihbmbs77pg2k71jog58u0qv8q8997kd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tripreminder",
+            "certificate_hash": "1244743fb8453cecb8b37a33be66b72daf9b5ddd"
+          }
+        },
         {
           "client_id": "442735924488-10v90ul3425g9o4mjaqhbna5l4khkffg.apps.googleusercontent.com",
           "client_type": 3
