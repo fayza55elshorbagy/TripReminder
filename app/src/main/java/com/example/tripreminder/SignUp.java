@@ -56,6 +56,18 @@ public class SignUp extends AppCompatActivity {
 
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        currentUser = firebaseAuth.getCurrentUser();
+            if(currentUser != null)
+            {
+                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                finish();
+            }
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
@@ -67,6 +79,7 @@ public class SignUp extends AppCompatActivity {
         u_confirmationPassword = findViewById(R.id.confpass_et);
         progressBar_up = findViewById(R.id.progressBar_up);
         firebaseAuth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
 
     }
 
@@ -131,11 +144,10 @@ public class SignUp extends AppCompatActivity {
                     if((task.isSuccessful()))
                     {
                         Toast.makeText(SignUp.this, "Registeration Done", Toast.LENGTH_SHORT).show();
-
                         Intent Main = new Intent(getApplicationContext(),MainActivity.class);
                         startActivity(Main);
                         //SendVerificationMail();
-                        //writeUserData(uid,phoneString,nameString);
+                         writeUserData();
                     }
                     else
                     {
@@ -152,11 +164,10 @@ public class SignUp extends AppCompatActivity {
         }
 
     }
-/*
-    private void writeUserData(String uid, String phoneString, String nameString) {
-        UserData obj = new UserData(phoneString,nameString);
-        databaseReference.child("Users").child(uid).setValue(obj);
-    }*/
+
+    private void writeUserData() {
+        databaseReference.child("Users").child(firebaseAuth.getCurrentUser().getUid()).child("UserName").setValue(nameString);
+    }
 /*
     private void SendVerificationMail() {
         currentUser.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {

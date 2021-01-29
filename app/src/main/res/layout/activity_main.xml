@@ -7,6 +7,9 @@
     android:layout_height="match_parent"
     tools:openDrawer="start"
     tools:context=".MainActivity">
+    <include android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/fragment_container"/>
     <com.google.android.material.navigation.NavigationView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

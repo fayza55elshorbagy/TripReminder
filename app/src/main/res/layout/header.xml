@@ -14,13 +14,18 @@
         android:orientation="horizontal"
         android:layout_marginTop="40dp"
         >
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="180dp"
-            android:layout_height="80dp"
-            android:src="@drawable/logo"
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="40dp"/>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_image"
+            android:layout_width="113dp"
+            android:layout_height="121dp"
+            android:src="@drawable/profile"
+            app:civ_border_color="#FF000000"
+            app:civ_border_width="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </LinearLayout>
 
@@ -33,7 +38,7 @@
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="70dp"
+            android:layout_marginLeft="10dp"
             android:text="Hello,"
             android:textColor="@color/black"
             android:textSize="25dp" />
@@ -42,7 +47,7 @@
             android:id="@+id/nameUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Fayza"
+            android:text="Faa"
             android:textSize="23dp"
             android:textColor="@color/projectColor"/>
     </LinearLayout>
@@ -53,7 +58,7 @@
         style="?android:attr/listSeparatorTextViewStyle"
         android:gravity="center_horizontal"
         android:background="@color/light_grey"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         />
 
 

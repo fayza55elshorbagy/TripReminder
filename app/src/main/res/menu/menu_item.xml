@@ -4,25 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".headeractivity"
     tools:showIn="navigation_view">
-        <item
-            android:id="@+id/barrier"
-            android:title="Barrier"
-            />
-
-    <group android:id="@+id/g2">
+    <group android:id="@+id/g1">
 
         <item
-            android:id="@+id/setting"
-            android:title="Troubleshooting" />
+            android:id="@+id/upComing"
+            android:title="Upcoming" />
         <item
-            android:id="@+id/fqa"
-            android:title="FQA" />
-        <item
-            android:id="@+id/feedItem"
-            android:title="Send Feedback" />
+            android:id="@+id/history"
+            android:title="History" />
     </group>
-    <group android:id="@+id/g1"
-        android:checkableBehavior="single">
+    <group android:id="@+id/g2">
+        <item
+            android:id="@+id/syncronyize"
+            android:title="Sync" />
         <item
             android:id="@+id/logout"
             android:title="Log Out" />

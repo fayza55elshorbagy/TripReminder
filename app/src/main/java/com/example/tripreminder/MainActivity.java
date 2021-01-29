@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,6 +37,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
     ImageView imageView;
     DrawerLayout drawerLayout;
+    FragmentManager fragmentManager;
+    FragmentTransaction fragmentTransaction;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
         navigationView.bringToFront();
         navigationView.setNavigationItemSelectedListener(this);
+
     }
 
     @Override
@@ -67,33 +74,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-
-/*
-    public void save(View view) {
-        String WritedName = name.getText().toString();
-        databaseReference.setValue(WritedName);
-    }
-
-    public void read(View view) {
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists())
-                {
-                    String ReadedName = snapshot.getValue().toString();
-                    Toast.makeText(MainActivity.this, ReadedName, Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-*/
-
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -102,6 +82,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(getApplicationContext(),SignIn.class));
             finish();
+        }
+        if(id == R.id.upComing)
+        {
+            getSupportFragmentManager().beginTransaction().replace(
+            R.id.fragmentContainer, new Upcoming(), "UpcomingFragment").commit();
+        }
+        if(id == R.id.history)
+        {
+            getSupportFragmentManager().beginTransaction().replace(
+                    R.id.fragmentContainer, new History(), "HistoryFragment").commit();
+        }
+        if(id == R.id.syncronyize)
+        {
+            getSupportFragmentManager().beginTransaction().replace(
+                    R.id.fragmentContainer, new Sync(), "SyncFragment").commit();
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
