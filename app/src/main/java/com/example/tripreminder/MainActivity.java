@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void save(View view) {
         String WritedName = name.getText().toString();
+        databaseReference.getKey();
         databaseReference.setValue(WritedName);
     }
 
