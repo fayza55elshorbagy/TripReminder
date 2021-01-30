@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".headeractivity"
     tools:showIn="navigation_view">
-    <group android:id="@+id/g1">
+    <group android:id="@+id/g1"
+        android:checkableBehavior="single">
 
         <item
             android:id="@+id/upComing"
@@ -13,7 +14,8 @@
             android:id="@+id/history"
             android:title="History" />
     </group>
-    <group android:id="@+id/g2">
+    <group android:id="@+id/g2"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/syncronyize"
             android:title="Sync" />

@@ -37,7 +37,7 @@ public class SignIn extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle("Really Exit?")
                 .setMessage("Are you sure you want to exit?")
-                .setNegativeButton(android.R.string.no, null)
+                .setNegativeButton(android.R.string.no,null)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -74,7 +74,7 @@ public class SignIn extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_in);
+        //setContentView(R.layout.activity_sign_in);
         init();
     }
 
