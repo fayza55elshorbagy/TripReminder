@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".headeractivity"
+    tools:showIn="navigation_view">
+    <group android:id="@+id/g1"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/upComing"
+            android:title="Upcoming" />
+        <item
+            android:id="@+id/history"
+            android:title="History" />
+    </group>
+    <group android:id="@+id/g2"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/syncronyize"
+            android:title="Sync" />
+        <item
+            android:id="@+id/logout"
+            android:title="Log Out" />
+    </group>
+
+
+</menu>
