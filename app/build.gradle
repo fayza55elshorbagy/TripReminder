@@ -39,6 +39,7 @@ dependencies {
     def lifecycle_version = "2.1.0"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+
     implementation 'com.google.android.libraries.places:places:2.2.0'
     implementation "androidx.cardview:cardview:1.0.0"
 

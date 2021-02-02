@@ -1,4 +1,4 @@
-package com.example.tripreminder;
+package com.example.tripreminder.roomDB;
 
 import android.app.Application;
 
@@ -6,7 +6,10 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.example.tripreminder.beans.Trips;
+
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 public class TripsViewModel extends AndroidViewModel {
@@ -32,4 +35,5 @@ public class TripsViewModel extends AndroidViewModel {
     public LiveData<List<Trips>> getAllTrips() {
         return mAllTrips;
     }
+    public List<Trips> getAll() throws ExecutionException, InterruptedException { return mRepository.getAll(); }
 }

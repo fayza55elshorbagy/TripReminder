@@ -88,7 +88,6 @@
     <color name="light_steel_blue">#B0C4DE</color>
     <color name="pale_turquoise">#AFEEEE</color>
     <color name="greenYellow">#ADFF2F</color>
-    <color name="light_blue">#ADD8E6</color>
     <color name="dark_gray">#A9A9A9</color>
     <color name="brown">#A52A2A</color>
     <color name="sienna">#A0522D</color>
@@ -163,4 +162,8 @@
     <color name="colorAccent1">#19AAE3</color>
     <color name="blue">#FFFFFF</color>
     <color name="projectColor">#05A8BB</color>
+    <color name="icon_color">#47A1DE</color>
+    <color name="hover_nav">#2A6FEA</color>
+    <color name="colorTransparent">#43000000</color>
+
 </resources>

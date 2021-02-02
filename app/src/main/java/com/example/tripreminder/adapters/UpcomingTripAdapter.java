@@ -1,33 +1,35 @@
 package com.example.tripreminder.adapters;
-import com.example.tripreminder.R;
-import com.example.tripreminder.UpcomingTrip;
-import com.example.tripreminder.beans.Trip;
+
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tripreminder.R;
+import com.example.tripreminder.beans.TripListener;
+import com.example.tripreminder.beans.Trips;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UpcomingTripAdapter extends RecyclerView.Adapter<UpcomingTripAdapter.ViewHolder> {
-    List<Trip> trips;
+    List<Trips> trips=new ArrayList<>();
+    private final TripListener tripListener;
 
-    public UpcomingTripAdapter(List<Trip> trips) {
-        this.trips = trips;
+
+    public UpcomingTripAdapter(TripListener tripListener) {
+        this.tripListener = tripListener;
     }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        int layout = R.layout.trip_item;
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.trip_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
@@ -35,16 +37,24 @@ public class UpcomingTripAdapter extends RecyclerView.Adapter<UpcomingTripAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Trip trip = trips.get(position);
-        holder.title.setText(trip.getTitle());
-        holder.from.setText(trip.getFrom());
-        holder.to.setText(trip.getTo());
+        Trips trip = trips.get(position);
+        holder.title.setText(trip.getName());
+        holder.from.setText(trip.getStartPoint());
+        holder.to.setText(trip.getEndPoint());
         holder.date.setText(trip.getDate());
         holder.time.setText(trip.getTime());
-        holder.type.setText(trip.getType());
-        holder.status.setText(trip.getStatus());
+       // holder.type.setText(trip.getType());
+      //  holder.status.setText(String.valueOf(trip.getStatus()));
+       // holder.from.setText(trip.getNotes());
 
+        holder.menu.setOnClickListener(v -> showMenu(holder.menu, trips.get(position)));
+        holder.note.setOnClickListener(v -> tripListener.showNote(trips.get(position)));
+        holder.startBtn.setOnClickListener(v -> tripListener.startNav(trips.get(position)));
 
+    }
+    public void saveTrips(List<Trips> trips) {
+        this.trips = trips;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -52,7 +62,7 @@ public class UpcomingTripAdapter extends RecyclerView.Adapter<UpcomingTripAdapte
         return trips.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements PopupMenu.OnMenuItemClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView title;
         TextView from;
         TextView to;
@@ -60,8 +70,8 @@ public class UpcomingTripAdapter extends RecyclerView.Adapter<UpcomingTripAdapte
         TextView time;
         TextView type;
         TextView status;
-        ImageView menu;
-        ImageView note;
+        Button menu;
+        Button note;
         Button startBtn;
 
         public ViewHolder(@NonNull View itemView) {
@@ -71,61 +81,61 @@ public class UpcomingTripAdapter extends RecyclerView.Adapter<UpcomingTripAdapte
             to = itemView.findViewById(R.id.toView);
             date = itemView.findViewById(R.id.dateView);
             time = itemView.findViewById(R.id.timeView);
-            type = itemView.findViewById(R.id.typeView);
-            status = itemView.findViewById(R.id.statusView);
+           // type = itemView.findViewById(R.id.typeView);
+           // status = itemView.findViewById(R.id.statusView);
             menu = itemView.findViewById(R.id.menu);
             note = itemView.findViewById(R.id.note);
             startBtn = itemView.findViewById(R.id.startBtn);
-            menu.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
-                    popupMenu.setOnMenuItemClickListener(ViewHolder.this::onMenuItemClick);
-                    popupMenu.inflate(R.menu.popup_menu);
-                    popupMenu.show();
-                }
-            });
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(itemView.getContext(), "click" + getAdapterPosition(), Toast.LENGTH_SHORT).show();
-                }
-            });
-            note.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(itemView.getContext(), "Note Click", Toast.LENGTH_SHORT).show();
-                }
-            });
 
-            startBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
         }
+    }
+    private void showMenu(View v, Trips trip) {
 
-        @Override
-        public boolean onMenuItemClick(MenuItem item) {
+        PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
+        setForceShowIcon(popupMenu);
+        popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
-                case R.id.notes:
-                    Toast.makeText(startBtn.getContext(), "you clicked on notes", Toast.LENGTH_SHORT).show();
-                    return true;
                 case R.id.edit:
-                    Toast.makeText(startBtn.getContext(), "you clicked on edit", Toast.LENGTH_SHORT).show();
+                    tripListener.edit(trip);
                     return true;
                 case R.id.delete:
-                    Toast.makeText(startBtn.getContext(), "you clicked on delete", Toast.LENGTH_SHORT).show();
+                    tripListener.delete(trip);
                     return true;
                 case R.id.cancel:
-                    Toast.makeText(startBtn.getContext(), "you clicked on cancel", Toast.LENGTH_SHORT).show();
+                    tripListener.cancel(trip);
                     return true;
-                default:
-                    return false;
             }
+            return false;
+        });
+        popupMenu.show();
+    }
 
-
+    public static void setForceShowIcon(PopupMenu popupMenu) {
+        try {
+            Field[] fields = popupMenu.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                if ("mPopup".equals(field.getName())) {
+                    field.setAccessible(true);
+                    Object menuPopupHelper = field.get(popupMenu);
+                    Class<?> classPopupHelper = null;
+                    if (menuPopupHelper != null) {
+                        classPopupHelper = Class.forName(menuPopupHelper
+                                .getClass().getName());
+                    }
+                    Method setForceIcons = null;
+                    if (classPopupHelper != null) {
+                        setForceIcons = classPopupHelper.getMethod(
+                                "setForceShowIcon", boolean.class);
+                    }
+                    if (setForceIcons != null) {
+                        setForceIcons.invoke(menuPopupHelper, true);
+                    }
+                    break;
+                }
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
     }
 }

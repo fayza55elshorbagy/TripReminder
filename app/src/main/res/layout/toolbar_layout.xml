@@ -8,7 +8,6 @@
     android:background="@drawable/addtrip_bg"
     android:minHeight="?attr/actionBarSize"
     android:theme="?attr/actionBarTheme"
-    app:title="Add Trip"
     app:titleTextColor="@color/white">
 
 </androidx.appcompat.widget.Toolbar>

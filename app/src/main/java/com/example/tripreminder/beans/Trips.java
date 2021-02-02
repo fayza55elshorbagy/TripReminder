@@ -1,25 +1,34 @@
-package com.example.tripreminder;
+package com.example.tripreminder.beans;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ListIterator;
+
 @Entity (tableName = "Trips")
-public class Trips {
+public class Trips implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private int Id;
-    @ColumnInfo(name = "Trip_Name")
+    @ColumnInfo(name = "TripName")
     private String name;
     private String startPoint;
     private String endPoint;
-    private String status;
+
+    //0-upcoming . 1- cancel . 2-done
+    private int status;
     private String type;
     private String repeating;
     private String time;
     private String date;
     private String notes;
 
-    public Trips(String name, String startPoint, String endPoint, String status, String type, String repeating, String time, String date,String notes) {
+    public Trips(String name, String startPoint, String endPoint, int status, String type, String repeating, String time, String date,String notes) {
         this.name = name;
         this.startPoint = startPoint;
         this.endPoint = endPoint;
@@ -29,7 +38,24 @@ public class Trips {
         this.time = time;
         this.date = date;
         this.notes=notes;
+    }
+    public String allNotes(List<String> notes) {
+        String allnotes="";
+        for (String v:notes) {
+            allnotes+=v+"#";
+        }
+      return allnotes;
+    }
 
+    public ArrayList<String> getNotesList() {
+        String[] note = notes.split("#");
+        ArrayList<String> notes=new ArrayList<>();
+        for (String n:note) {
+            if(n!="")
+            notes.add(n);
+        }
+
+        return notes;
     }
 
     public String getNotes() {
@@ -38,6 +64,14 @@ public class Trips {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public void setNotesList(List<String> notes) {
+        String allnotes="";
+        for (String v:notes) {
+            allnotes+=v+"#";
+        }
+        this.notes = allnotes;
     }
 
     public String getName() {
@@ -49,14 +83,22 @@ public class Trips {
     }
 
     public String getStartPoint() {
-        return startPoint;
+        String [] split=startPoint.split("#");
+        return split[0];
     }
 
+    public String getStartLoc() {
+        return startPoint;
+    }
     public void setStartPoint(String startPoint) {
         this.startPoint = startPoint;
     }
 
     public String getEndPoint() {
+        String [] split1=endPoint.split("#");
+        return split1[0];
+    }
+    public String getEndLoc() {
         return endPoint;
     }
 
@@ -64,11 +106,11 @@ public class Trips {
         this.endPoint = endPoint;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
@@ -108,10 +150,6 @@ public class Trips {
         return Id;
     }
 
-    public void setId(int id) {
-        Id = id;
-    }
-
     @Override
     public String toString() {
         return "Trips{" +
@@ -124,6 +162,12 @@ public class Trips {
                 ", repeating='" + repeating + '\'' +
                 ", time='" + time + '\'' +
                 ", date='" + date + '\'' +
+                ", notes='" + notes + '\'' +
                 '}';
     }
+
+    public void setId(int id) {
+        Id = id;
+    }
+
 }

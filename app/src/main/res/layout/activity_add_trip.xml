@@ -150,7 +150,7 @@
                             android:padding="10dp"
                             android:layout_weight="1"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_baseline_alarm_24" />
+                            android:src="@drawable/ic_baseline_access_alarm_24" />
 
                         <TextView
                             android:id="@+id/alarmTextView"
@@ -163,7 +163,7 @@
                             android:layout_gravity="center"
                             android:layout_weight="1"
                             tools:text="22:06"
-                            android:hint="hh:mm"/>
+                            android:hint="HH:mm"/>
                     </LinearLayout>
                 </LinearLayout>
 

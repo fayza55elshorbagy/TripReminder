@@ -1,15 +1,14 @@
-package com.example.tripreminder;
+package com.example.tripreminder.roomDB;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
-import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities=Trips.class,version=2,exportSchema = false)
+import com.example.tripreminder.beans.Trips;
+
+@Database(entities= Trips.class,version=2,exportSchema = false)
 public abstract class TripRoomDb extends RoomDatabase {
     private static TripRoomDb instance;
     public abstract TripDAo infoDAo();
@@ -17,10 +16,14 @@ public abstract class TripRoomDb extends RoomDatabase {
     public static synchronized TripRoomDb getInstance(Context context) {
         if(instance==null){
             instance=Room.databaseBuilder(context.getApplicationContext(),
-                TripRoomDb.class, "Trips-DB").fallbackToDestructiveMigration().addCallback(rommCallBack).build();
+                TripRoomDb.class, "Trips-DB") .build();
         }
         return  instance;
     }
+
+
+/*
+.fallbackToDestructiveMigration().addCallback(rommCallBack)
     private static RoomDatabase.Callback rommCallBack=new RoomDatabase.Callback(){
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
@@ -42,8 +45,8 @@ public abstract class TripRoomDb extends RoomDatabase {
         }
         @Override
         protected Void doInBackground(Void... voids) {
-           // mTripDao.insert(new Trips("ola", "0123"));
+           mTripDao.insert(new Trips("ola", "0123","cairo","ooo","re","ii","890","jii","klklk/jkn"));
             return null;
         }
-    }
+    }*/
 }
