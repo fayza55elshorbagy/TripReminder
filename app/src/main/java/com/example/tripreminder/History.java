@@ -2,11 +2,18 @@ package com.example.tripreminder;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +21,10 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class History extends Fragment {
+    RecyclerView recyclerView;
+    HistoryAdapter adapter;
+    List<Trip> tripList;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -52,7 +63,26 @@ public class History extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        tripList=new ArrayList<>();
+        tripList.add(new Trip("work","zagazig","ismailia","2021","15:15","one way","upcoming"));
+        tripList.add(new Trip("work","zagazig","ismailia","2021","15:15","one way","upcoming"));
+        tripList.add(new Trip("work","zagazig","ismailia","2021","15:15","one way","upcoming"));
+        tripList.add(new Trip("work","zagazig","ismailia","2021","15:15","one way","upcoming"));
+        tripList.add(new Trip("work","zagazig","ismailia","2021","15:15","one way","upcoming"));
+        tripList.add(new Trip("work","zagazig","ismailia","2021","15:15","one way","upcoming"));
+        tripList.add(new Trip("work","zagazig","ismailia","2021","15:15","one way","upcoming"));
+        tripList.add(new Trip("work","zagazig","ismailia","2021","15:15","one way","upcoming"));
+        tripList.add(new Trip("work","zagazig","ismailia","2021","15:15","one way","upcoming"));
+        recyclerView=view.findViewById(R.id.historyRecView);
+        adapter=new HistoryAdapter(tripList);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
