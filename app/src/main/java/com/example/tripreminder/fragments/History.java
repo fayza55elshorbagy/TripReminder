@@ -1,7 +1,9 @@
 package com.example.tripreminder.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -91,7 +93,8 @@ public class History extends Fragment {
         itemListener = new HistoryListener() {
             @Override
             public void delete(Trips trip) {
-                viewModel.delete(trip);
+                AlertDialog diaBox = AskOption(trip);
+                diaBox.show();
             }
             @Override
             public void showNote(Trips trip){
@@ -124,5 +127,32 @@ public class History extends Fragment {
         });
         dialog.show();
 
+    }
+    private AlertDialog AskOption(Trips trip) {
+        AlertDialog myQuittingDialogBox = new AlertDialog.Builder(getContext())
+                // set message, title, and icon
+                .setTitle("Delete")
+                .setMessage("Do you want to Delete")
+                .setIcon(R.drawable.ic_baseline_delete_forever_24)
+
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        //your deleting code
+                        viewModel.delete(trip);
+                        dialog.dismiss();
+                    }
+
+                })
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+
+                    }
+                })
+                .create();
+
+        return myQuittingDialogBox;
     }
 }

@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -153,8 +154,8 @@ public class Upcoming extends Fragment {
         dialog.setContentView(R.layout.note_dialog);
 
         ImageView btnCancel= (ImageView) dialog.findViewById(R.id.img_cancel);
-        FloatingActionButton addNoteBtn=(FloatingActionButton) dialog.findViewById(R.id.addNoteBtn);
-        FloatingActionButton saveNoteBtn=(FloatingActionButton) dialog.findViewById(R.id.saveNoteBtn);
+        Button addNoteBtn=(Button) dialog.findViewById(R.id.addNoteBtn);
+        Button saveNoteBtn=(Button) dialog.findViewById(R.id.saveNoteBtn);
         EditText notetxt=(EditText) dialog.findViewById(R.id.type_note_txt);
         RecyclerView recyclerView = dialog.findViewById(R.id.recycler);
         notesAdapter adapterRe = new notesAdapter(getContext(),noteList);
@@ -186,6 +187,7 @@ public class Upcoming extends Fragment {
                 Log.i("note","nossssss"+noteList);
                 adapterRe.notifyDataSetChanged();
                 notetxt.setVisibility(View.INVISIBLE);
+                notetxt.setText("");
                 saveNoteBtn.setVisibility(View.INVISIBLE);
                 addNoteBtn.setVisibility(View.VISIBLE);
 
@@ -194,8 +196,7 @@ public class Upcoming extends Fragment {
 
         dialog.show();
     }
-    private AlertDialog AskOption(Trips trip)
-    {
+    private AlertDialog AskOption(Trips trip) {
         AlertDialog myQuittingDialogBox = new AlertDialog.Builder(getContext())
                 // set message, title, and icon
                 .setTitle("Delete")

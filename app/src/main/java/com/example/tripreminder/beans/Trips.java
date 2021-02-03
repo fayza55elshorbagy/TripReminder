@@ -58,20 +58,20 @@ public class Trips implements Serializable {
         return notes;
     }
 
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
-
     public void setNotesList(List<String> notes) {
         String allnotes="";
         for (String v:notes) {
             allnotes+=v+"#";
         }
         this.notes = allnotes;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     public String getName() {
@@ -90,6 +90,7 @@ public class Trips implements Serializable {
     public String getStartLoc() {
         return startPoint;
     }
+
     public void setStartPoint(String startPoint) {
         this.startPoint = startPoint;
     }
@@ -98,12 +99,33 @@ public class Trips implements Serializable {
         String [] split1=endPoint.split("#");
         return split1[0];
     }
+
     public String getEndLoc() {
         return endPoint;
     }
 
     public void setEndPoint(String endPoint) {
         this.endPoint = endPoint;
+    }
+
+    public String getStartLat() {
+        String [] split=startPoint.split("#");
+        return split[1];
+    }
+
+    public String getStartLng() {
+        String [] split=startPoint.split("#");
+        return split[2];
+    }
+
+    public String getEndLat() {
+        String [] split=endPoint.split("#");
+        return split[1];
+    }
+
+    public String getEndLng() {
+        String [] split=endPoint.split("#");
+        return split[2];
     }
 
     public int getStatus() {

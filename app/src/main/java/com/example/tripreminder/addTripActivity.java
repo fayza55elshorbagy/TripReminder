@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -173,11 +174,15 @@ public class addTripActivity extends AppCompatActivity  {
                         temp.set(Calendar.MINUTE,selectedMinute);
 
                         if(temp.after(GregorianCalendar.getInstance())){
-                            Toast.makeText(MainActivity.this, "Cannot select a future time", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(addTripActivity.this, "Cannot select a future time"+   temp.after(GregorianCalendar.getInstance()), Toast.LENGTH_SHORT).show();
                         } else {
                             timeText.setText( selectedHour + ":" + selectedMinute);
                         }*/
+
+                        // Date currentTime = Calendar.getInstance().getTime();
+                        //Toast.makeText(addTripActivity.this, "future time"+currentTime, Toast.LENGTH_LONG).show();
                         timeText.setText( selectedHour + ":" + selectedMinute);
+
                     }
                 }, hour, minute, true);//Yes 24 hour time
                 mTimePicker.setTitle("Select Time");
