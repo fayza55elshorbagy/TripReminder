@@ -29,5 +29,7 @@
     -->
     <string name="hello_world">Hello Square World!</string>
     <string name="start">Start</string>
+    <string name="title_activity_poly">PolyActivity</string>
+    <string name="maps_api_key">\"AIzaSyALHrPpUa1o9Hc-6zTue0nt_CgM0tJa_pc\"</string>
 
 </resources>
