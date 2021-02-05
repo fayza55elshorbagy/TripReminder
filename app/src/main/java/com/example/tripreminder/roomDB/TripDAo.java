@@ -1,4 +1,4 @@
-package com.example.tripreminder;
+package com.example.tripreminder.roomDB;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -6,6 +6,8 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
+
+import com.example.tripreminder.beans.Trips;
 
 import java.util.List;
 
@@ -23,6 +25,17 @@ public interface TripDAo {
 
     @Query("select * From Trips")
     LiveData<List<Trips>> getAllTrips();
+
+    @Query("select * From Trips")
+    List<Trips> getAll();
+
+    @Query("select * From Trips where status=0")
+    List<Trips> getUpComing();
+
+    @Query("select * From Trips where status=1 and status =2")
+    List<Trips> getHistory();
+
+
 
 
 }

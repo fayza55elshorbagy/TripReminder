@@ -5,6 +5,10 @@
     <string name="start_details">Start Details</string>
     <string name="Trip_type">Trip Type</string>
     <string name="repeating">Repeating</string>
+
+    <string name="navigation_drawer_open">open navigation drawer</string>
+    <string name="navigation_drawer_close">close navigation drawer</string>
+
     <string-array name="repeating_options">
         <item>No Repeat</item>
         <item>Repeat Daily</item>
@@ -18,4 +22,12 @@
     </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_upcoming_trip">UpcomingTrip</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
+    <string name="start">Start</string>
+
 </resources>

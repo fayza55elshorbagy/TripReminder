@@ -1,0 +1,288 @@
+package com.example.tripreminder.fragments;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.tripreminder.MainActivity;
+import com.example.tripreminder.R;
+import com.example.tripreminder.SignUp;
+import com.example.tripreminder.adapters.UpcomingTripAdapter;
+import com.example.tripreminder.adapters.notesAdapter;
+import com.example.tripreminder.addTripActivity;
+import com.example.tripreminder.beans.TripListener;
+import com.example.tripreminder.beans.Trips;
+import com.example.tripreminder.bubbleService;
+import com.example.tripreminder.roomDB.TripsViewModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
+
+public class Upcoming extends Fragment {
+
+    RecyclerView recyclerView;
+    UpcomingTripAdapter adapter;
+    List<Trips> tripList;
+    FloatingActionButton addBtn;
+    private TripsViewModel viewModel;
+    private TripListener menuItemListener;
+    public static Dialog dialog;
+    ArrayList<String> noteList = new ArrayList<>();
+    private int MY_PERMISSION = 100;
+
+    public Upcoming() {
+        // Required empty public constructor
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initPopUpMenuItemListener();
+        tripList=new ArrayList<>();
+        noteList=new ArrayList<>();
+
+        recyclerView=view.findViewById(R.id.recView);
+
+        adapter=new UpcomingTripAdapter(menuItemListener);
+        recyclerView.setAdapter(adapter);
+
+        addBtn=view.findViewById(R.id.addBtn);
+        addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getContext(), addTripActivity.class);
+               // startActivityForResult(intent,1);
+                startActivity(intent);
+            }
+        });
+
+        viewModel= ViewModelProviders.of(this).get(TripsViewModel.class);
+        viewModel.getAllTrips().observe(getViewLifecycleOwner(), new Observer<List<Trips>>() {
+            @Override
+            public void onChanged(List<Trips> trips) {
+                List<Trips> upcomingTrips=new ArrayList<>();
+                for (Trips t:trips) {
+                    if(t.getStatus()==0)
+                        upcomingTrips.add(t);
+                }
+                adapter.saveTrips(upcomingTrips);
+                Log.i("note","ol  "+trips.toString());
+                Toast.makeText(getContext(), "Added Successfully", Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_upcoming,container,false);
+        return view;
+    }
+
+    private void initPopUpMenuItemListener() {
+        menuItemListener = new TripListener() {
+
+            @Override
+            public void edit(Trips trip) {
+                Intent intent=new Intent(getContext(), addTripActivity.class);
+                intent.putExtra(addTripActivity.TRIP_OBJ, trip);
+                intent.putExtra(addTripActivity.TRIP_ID,trip.getId());
+                startActivity(intent);
+                Toast.makeText(getContext(), "you clicked on edit", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void delete(Trips trip) {
+                AlertDialog diaBox = AskOption(trip);
+                diaBox.show();
+
+
+            }
+
+            @Override
+            public void startNav(Trips trip) {
+                Thread splash = new Thread()
+                {
+                    @Override
+                    public void run() {
+                        super.run();
+                        try {
+                            sleep(500);
+                            checkBubblePermission();;
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                splash.start();
+
+                String url = "http://maps.google.com/maps?saddr=" + 31.296184 + "," + 31.699942 + "&daddr=" + 31.21827370176533 + "," + 31.358676649743607;
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(url));
+                intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+                startActivity(intent);
+            }
+
+
+            @Override
+            public void cancel(Trips trip) {
+                trip.setStatus(1);
+                viewModel.update(trip);
+
+            }
+
+            @Override
+            public void showNote(Trips trip){
+                noteList=trip.getNotesList();
+                showDialog(getActivity(),trip);
+
+            }
+
+        };
+    }
+
+    public void checkBubblePermission() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(getActivity())) {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + getActivity().getPackageName()));
+            startActivityForResult(intent, MY_PERMISSION);
+        } else {
+            showBubbles();
+        }
+
+    }
+
+    private void showBubbles() {
+        getActivity().startService(new Intent(getActivity(), bubbleService.class));
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == MY_PERMISSION) {
+            if (resultCode == RESULT_OK) {
+                showBubbles();
+            }
+        }
+
+
+    }
+    public void showDialog(Activity activity, Trips trip){
+
+        dialog = new Dialog(activity);
+        dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setContentView(R.layout.note_dialog);
+
+        ImageView btnCancel= (ImageView) dialog.findViewById(R.id.img_cancel);
+        FloatingActionButton addNoteBtn=(FloatingActionButton) dialog.findViewById(R.id.addNoteBtn);
+        FloatingActionButton saveNoteBtn=(FloatingActionButton) dialog.findViewById(R.id.saveNoteBtn);
+        EditText notetxt=(EditText) dialog.findViewById(R.id.type_note_txt);
+        RecyclerView recyclerView = dialog.findViewById(R.id.recycler);
+        notesAdapter adapterRe = new notesAdapter(getContext(),noteList);
+        recyclerView.setAdapter(adapterRe);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                trip.setNotesList(noteList);
+                viewModel.update(trip);
+            }
+        });
+        addNoteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addNoteBtn.setVisibility(View.INVISIBLE);
+                notetxt.setVisibility(View.VISIBLE);
+                saveNoteBtn.setVisibility(View.VISIBLE);
+            }
+        });
+        saveNoteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String note=notetxt.getText().toString().trim();
+                if(!note.isEmpty())
+                   noteList.add(notetxt.getText().toString());
+                Log.i("note","nossssss"+noteList);
+                adapterRe.notifyDataSetChanged();
+                notetxt.setVisibility(View.INVISIBLE);
+                saveNoteBtn.setVisibility(View.INVISIBLE);
+                addNoteBtn.setVisibility(View.VISIBLE);
+
+            }
+        });
+
+        dialog.show();
+    }
+    private AlertDialog AskOption(Trips trip)
+    {
+        AlertDialog myQuittingDialogBox = new AlertDialog.Builder(getContext())
+                // set message, title, and icon
+                .setTitle("Delete")
+                .setMessage("Do you want to Delete")
+                .setIcon(R.drawable.ic_baseline_delete_forever_24)
+
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        //your deleting code
+                        viewModel.delete(trip);
+                        dialog.dismiss();
+                    }
+
+                })
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+
+                    }
+                })
+                .create();
+
+        return myQuittingDialogBox;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().stopService(new Intent(getActivity(),bubbleService.class));
+
+    }
+}

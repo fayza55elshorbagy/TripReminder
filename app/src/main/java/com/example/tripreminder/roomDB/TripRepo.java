@@ -1,21 +1,26 @@
-package com.example.tripreminder;
+package com.example.tripreminder.roomDB;
 
 import android.app.Application;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
+import com.example.tripreminder.beans.Trips;
+
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class TripRepo {
 
         private TripDAo mTripDao;
         private LiveData<List<Trips>> getAllTrips;
+
         public TripRepo(Application app)
         {
             TripRoomDb db = TripRoomDb.getInstance(app);
             mTripDao = db.infoDAo();
             getAllTrips = mTripDao.getAllTrips();
+
         }
         //operation
         //insert
@@ -33,16 +38,20 @@ public class TripRepo {
         {
             new UpdateAsyncTask(mTripDao).execute(trips);
         }
-        //getallwords
+        //getalltrips
         public LiveData<List<Trips>> getAllTrips()
         {
             return getAllTrips;
         }
-        //delete all words
+        //delete all trips
         public void deleteAllTrips()
         {
             new DeleteAllTripsAsyncTask(mTripDao).execute();
         }
+        //get All
+        public List<Trips> getAll()throws ExecutionException, InterruptedException { return new GetAllsAsyncTask(mTripDao).execute().get(); }
+
+
     private static class InsertAsyncTask extends AsyncTask<Trips, Void, Void> {
     private TripDAo minfoDao;
     public InsertAsyncTask(TripDAo tripDao)
@@ -91,5 +100,19 @@ public class TripRepo {
         return null;
     }
 }
+    private class GetAllsAsyncTask extends AsyncTask<Void, Void,List<Trips>> {
+        private TripDAo mAsyncTaskDao;
 
+        GetAllsAsyncTask(TripDAo dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected List<Trips> doInBackground(Void... voids) {
+            return mAsyncTaskDao.getAll();
+        }
+    }
 }
+
+
+
