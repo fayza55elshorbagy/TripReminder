@@ -1,166 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-<androidx.cardview.widget.CardView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    android:layout_margin="10dp"
-    app:cardElevation="@dimen/cardview_default_radius">
-    <androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="8dp"
+    android:background="#F3F2F7"
+    card_view:cardElevation="10dp"
+    card_view:cardUseCompatPadding="true"
+    card_view:cardCornerRadius="15dp">
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/titleLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_margin="10dp"
-            android:text="title: "
-            android:textSize="15sp"/>
-        <TextView
-            android:id="@+id/titleView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/titleLabel"
-            android:layout_margin="10dp"
-            android:textSize="15sp"
-            android:text="work"/>
-        <TextView
-            android:id="@+id/fromLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/titleLabel"
-            android:text="from: "
-            android:layout_margin="10dp"
-            android:textSize="15sp"/>
-        <TextView
-            android:id="@+id/fromView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/fromLabel"
-            app:layout_constraintTop_toTopOf="@id/fromLabel"
-            android:hint="Zagazig"
-            android:textSize="15sp"/>
-        <TextView
-            android:id="@+id/toLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fromLabel"
-            android:text="to: "
-            android:layout_margin="10dp"
-            android:textSize="15sp"/>
-        <TextView
-            android:id="@+id/toView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/toLabel"
-            app:layout_constraintTop_toTopOf="@id/toLabel"
-            android:hint="Ismalia"
-            android:textSize="15sp"/>
-        <TextView
-            android:id="@+id/dateLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toLabel"
-            android:text="date: "
-            android:layout_margin="10dp"
-            android:textSize="15sp"/>
-        <TextView
-            android:id="@+id/dateView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/dateLabel"
-            app:layout_constraintTop_toTopOf="@id/dateLabel"
-            android:hint="28/1/2021"
-            android:textSize="15sp"/>
-        <TextView
-            android:id="@+id/timeLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/dateLabel"
-            android:text="time: "
-            android:layout_margin="10dp"
-            android:textSize="15sp"/>
-        <TextView
-            android:id="@+id/timeView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/timeLabel"
-            app:layout_constraintTop_toTopOf="@id/timeLabel"
-            android:hint="15:13"
-            android:textSize="15sp"/>
-        <TextView
-            android:id="@+id/typeLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/timeLabel"
-            android:text="type: "
-            android:layout_margin="10dp"
-            android:textSize="15sp"/>
-        <TextView
-            android:id="@+id/typeView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/typeLabel"
-            app:layout_constraintTop_toTopOf="@id/typeLabel"
-            android:hint="one way"
-            android:textSize="15sp"/>
-        <TextView
-            android:id="@+id/statusLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/typeLabel"
-            app:layout_constraintBottom_toTopOf="@id/startBtn"
-            android:text="status: "
-            android:layout_margin="10dp"
-            android:textSize="15sp"/>
-        <TextView
-            android:id="@+id/statusView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/statusLabel"
-            app:layout_constraintTop_toTopOf="@id/statusLabel"
-            android:hint="upcoming"
-            android:textSize="15sp"/>
-        <ImageView
-            android:id="@+id/menu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:src="@drawable/ic_menu"
-            android:layout_margin="10dp"
-            android:onClick="popup"
-            />
-        <ImageView
-            android:id="@+id/note"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@id/startBtn"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:src="@drawable/ic_note"
-            android:layout_margin="10dp"
-            />
-        <Button
-            android:id="@+id/startBtn"
+        android:layout_height="wrap_content"
+        android:background="@drawable/cardview_bg"
+        android:orientation="vertical"
+        android:paddingBottom="4dp">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="start"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
+            android:weightSum="1"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/titleView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:textColor="#0C0C0C"
+                android:textSize="16sp"
+                android:layout_marginTop="4dp"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                tools:text="Trip Name" />
+            <Button
+                android:id="@+id/menu"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="end"
+                android:gravity="end"
+                app:backgroundTint="@color/icon_color"
+                android:background="@drawable/ic_baseline_more_vert_24"  />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="4dp">
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="15dp"
+                    card_view:srcCompat="@drawable/ic_baseline_location_on_24" />
+                <TextView
+                    android:id="@+id/fromView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="9dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="4dp"
+                    android:textColor="#090909"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    tools:text="startPoint" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingBottom="4dp">
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="15dp"
+                    card_view:srcCompat="@drawable/ic_baseline_location_on_24" />
+                <TextView
+                    android:id="@+id/toView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="9dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="4dp"
+                    android:textColor="#090909"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    tools:text="EndPoint" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                card_view:srcCompat="@drawable/alarm" />
+            <TextView
+                android:id="@+id/dateView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginStart="9dp"
+                android:textColor="#101010"
+                tools:text="15/10/2010" />
+            <TextView
+                android:id="@+id/timeView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginStart="5dp"
+                android:textColor="#101010"
+                tools:text="08:30 AM" />
+        </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/relative"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/startBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/botton_bg"
+                android:text="@string/start"
+                android:layout_centerInParent="true"
+                app:backgroundTint="@null" />
+            <Button
+                android:id="@+id/note"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginTop="4dp"
+                app:backgroundTint="@color/icon_color"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/ic_baseline_sticky_note_2_24" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
 </androidx.cardview.widget.CardView>
-</androidx.constraintlayout.widget.ConstraintLayout>
