@@ -1,16 +1,23 @@
 package com.example.tripreminder.adapters;
 
 import android.view.LayoutInflater;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tripreminder.R;
+
+
 import com.example.tripreminder.beans.HistoryListener;
+import com.example.tripreminder.beans.TripListener;
 import com.example.tripreminder.beans.Trips;
 
 import java.util.ArrayList;
@@ -69,8 +76,10 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         TextView time;
         TextView type;
         TextView status;
+
         Button note;
         Button del;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -79,9 +88,12 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             to = itemView.findViewById(R.id.toView);
             date = itemView.findViewById(R.id.dateView);
             time = itemView.findViewById(R.id.timeView);
+
+
             status = itemView.findViewById(R.id.statusView);
             note = itemView.findViewById(R.id.note);
-            //del = itemView.findViewById(R.id.remove_btn);
+            del = itemView.findViewById(R.id.remove_btn);
+
 
         }
 

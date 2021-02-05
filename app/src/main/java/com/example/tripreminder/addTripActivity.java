@@ -1,12 +1,25 @@
 package com.example.tripreminder;
 
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProviders;
+
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -33,13 +46,17 @@ import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import static com.example.tripreminder.DialogActivity.notificationIntentKey;
 
 public class addTripActivity extends AppCompatActivity  {
     private Toolbar toolBar;
@@ -61,6 +78,7 @@ public class addTripActivity extends AppCompatActivity  {
     private Trips editObj;
     private String strStartPoint="";
     private String strEndPoint="";
+
 
     private static int AUTOCOMPLETE_REQUEST_CODE_START = 1;
     private static int AUTOCOMPLETE_REQUEST_CODE_END = 2;
@@ -163,20 +181,27 @@ public class addTripActivity extends AppCompatActivity  {
                 //  Calendar mcurrentTime = Calendar.getInstance();
                 int hour = myCalendar.get(Calendar.HOUR_OF_DAY);
                 int minute = myCalendar.get(Calendar.MINUTE);
+                myCalendar.set(Calendar.SECOND,0);
                 TimePickerDialog mTimePicker;
                 mTimePicker = new TimePickerDialog(addTripActivity.this,android.R.style.Theme_Holo_Light_Dialog_MinWidth, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        myCalendar.set(Calendar.HOUR_OF_DAY,selectedHour);
+                        myCalendar.set(Calendar.MINUTE,selectedMinute);
                       /*  Calendar temp=Calendar.getInstance();
                         temp.set(Calendar.HOUR_OF_DAY,selectedHour);
                         temp.set(Calendar.MINUTE,selectedMinute);
 
                         if(temp.after(GregorianCalendar.getInstance())){
-                            Toast.makeText(MainActivity.this, "Cannot select a future time", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(addTripActivity.this, "Cannot select a future time"+   temp.after(GregorianCalendar.getInstance()), Toast.LENGTH_SHORT).show();
                         } else {
                             timeText.setText( selectedHour + ":" + selectedMinute);
                         }*/
+
+                        // Date currentTime = Calendar.getInstance().getTime();
+                        //Toast.makeText(addTripActivity.this, "future time"+currentTime, Toast.LENGTH_LONG).show();
                         timeText.setText( selectedHour + ":" + selectedMinute);
+
                     }
                 }, hour, minute, true);//Yes 24 hour time
                 mTimePicker.setTitle("Select Time");
@@ -188,6 +213,13 @@ public class addTripActivity extends AppCompatActivity  {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if(!Settings.canDrawOverlays(addTripActivity.this)) {
+                        errorWarningForNotGivingDrawOverAppsPermissions();
+                    }
+                }
+                Log.e("trip", DateFormat.getDateTimeInstance().format(myCalendar.getTime()));
                 Boolean valid=validateInput();
                 if(valid) {
                     String name = tripName.getText().toString();
@@ -209,6 +241,9 @@ public class addTripActivity extends AppCompatActivity  {
                         viewModel.insert(new Trips(name, strStartPoint, strEndPoint, 0, type, repeat, time, date,""));
                         clearText();
                     }
+
+                    Log.e("trip", DateFormat.getDateTimeInstance().format(myCalendar.getTime()));
+                    setAlarm(myCalendar);
 
                 }
 
@@ -318,5 +353,25 @@ public class addTripActivity extends AppCompatActivity  {
             return;
         }
 
+    }
+
+    private void setAlarm(Calendar calendar) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent broadcastIntent= new Intent(addTripActivity.this,NotificationReceiver.class);
+        broadcastIntent.putExtra(notificationIntentKey,"say goodbye to your data");
+        PendingIntent pendingBroadcastIntent=PendingIntent.getBroadcast(addTripActivity.this,7,
+                broadcastIntent,0);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingBroadcastIntent);
+
+    }
+
+    private void errorWarningForNotGivingDrawOverAppsPermissions(){
+        new AlertDialog.Builder(this).setTitle("Warning").setCancelable(false).setMessage("Unfortunately the display over other apps permission" +
+                " is not granted so the application might not behave properly \nTo enable this permission kindly restart the application" )
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).show();
     }
 }

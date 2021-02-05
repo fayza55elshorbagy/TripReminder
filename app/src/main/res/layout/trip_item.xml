@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -40,7 +41,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_gravity="end"
                 android:gravity="end"
-                app:backgroundTint="@color/proj_color1"
+                app:backgroundTint="@color/icon_color"
                 android:background="@drawable/ic_baseline_more_vert_24"  />
 
         </LinearLayout>
@@ -141,7 +142,7 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
                 android:background="@drawable/botton_bg"
-                android:text="start"
+                android:text="@string/start"
                 android:layout_centerInParent="true"
                 app:backgroundTint="@null" />
             <Button
@@ -150,7 +151,7 @@
                 android:layout_height="30dp"
                 android:layout_marginEnd="4dp"
                 android:layout_marginTop="4dp"
-                app:backgroundTint="@color/proj_color1"
+                app:backgroundTint="@color/icon_color"
                 android:layout_alignParentEnd="true"
                 android:background="@drawable/ic_baseline_sticky_note_2_24" />
         </RelativeLayout>

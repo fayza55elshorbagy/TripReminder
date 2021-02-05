@@ -12,11 +12,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
       android:background="@drawable/dialog_note_bg"
-    android:weightSum="3"
+    android:weightSum="6"
     android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
 
         <TextView
             android:layout_width="wrap_content"
@@ -35,66 +36,62 @@
             android:layout_alignParentEnd="true"
             android:padding="8dp"
             android:src="@drawable/ic_baseline_cancel_24"
-            app:backgroundTint="@color/proj_color1" />
+            app:backgroundTint="@color/icon_color" />
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_marginTop="5dp"
+        android:layout_height="0dp"
         android:padding="10dp"
-        android:layout_weight="1"
+        android:layout_weight="5"
         android:layout_marginBottom="5dp"
         tools:listitem="@layout/note_item" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="3">
+            android:weightSum="5">
 
             <EditText
                 android:id="@+id/type_note_txt"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="4dp"
-                android:layout_weight="1"
+                android:layout_weight="4"
                 android:background="@drawable/custome_edit_text"
                 android:hint="Type a Note"
                 android:visibility="invisible" />
+            <Button
+                android:id="@+id/saveNoteBtn"
+                android:layout_weight="1"
+                android:visibility="invisible"
+                android:layout_width="10dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:layout_alignParentEnd="true"
+                app:backgroundTint="@color/icon_color"
+                android:background="@drawable/ic_baseline_send_24" />
         </LinearLayout>
 
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <Button
             android:id="@+id/addNoteBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
+            android:visibility="visible"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginTop="5dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="4dp"
-            android:clickable="true"
-            android:src="@drawable/ic_add"
-            app:backgroundTint="@color/proj_color1" />
+            android:layout_alignParentEnd="true"
+            app:backgroundTint="@color/icon_color"
+            android:background="@drawable/ic_baseline_note_add_24"  />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/saveNoteBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="4dp"
-            android:clickable="true"
-            android:src="@drawable/ic_baseline_send_24"
-            android:visibility="invisible"
-            app:backgroundTint="@color/proj_color1" />
+
 
 
     </RelativeLayout>

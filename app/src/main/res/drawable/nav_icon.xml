@@ -1,4 +1,5 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="@color/proj_color1" android:state_checked="true" />
+
+    <item android:color="@color/hover_nav" android:state_checked="true" />
     <item android:color="@color/gray" />
 </selector>

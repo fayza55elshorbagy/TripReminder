@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-
+import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -25,7 +25,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.tripreminder.MainActivity;
 import com.example.tripreminder.R;
 import com.example.tripreminder.SignUp;
@@ -35,12 +34,26 @@ import com.example.tripreminder.addTripActivity;
 import com.example.tripreminder.beans.TripListener;
 import com.example.tripreminder.beans.Trips;
 import com.example.tripreminder.bubbleService;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.example.tripreminder.R;
+import com.example.tripreminder.adapters.UpcomingTripAdapter;
+import com.example.tripreminder.addTripActivity;
+import com.example.tripreminder.beans.TripListener;
+import com.example.tripreminder.beans.Trips;
+import com.example.tripreminder.adapters.notesAdapter;
 import com.example.tripreminder.roomDB.TripsViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import static android.app.Activity.RESULT_OK;
 
 public class Upcoming extends Fragment {
@@ -76,7 +89,6 @@ public class Upcoming extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(getContext(), addTripActivity.class);
-               // startActivityForResult(intent,1);
                 startActivity(intent);
             }
         });
@@ -116,7 +128,8 @@ public class Upcoming extends Fragment {
 
             @Override
             public void edit(Trips trip) {
-                Intent intent=new Intent(getContext(), addTripActivity.class);
+
+                Intent intent=new Intent(getContext(),addTripActivity.class);
                 intent.putExtra(addTripActivity.TRIP_OBJ, trip);
                 intent.putExtra(addTripActivity.TRIP_ID,trip.getId());
                 startActivity(intent);
@@ -154,7 +167,8 @@ public class Upcoming extends Fragment {
                 intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
                 startActivity(intent);
             }
-
+                   //start 
+            }
 
             @Override
             public void cancel(Trips trip) {
@@ -172,7 +186,6 @@ public class Upcoming extends Fragment {
 
         };
     }
-
     public void checkBubblePermission() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(getActivity())) {
@@ -201,7 +214,8 @@ public class Upcoming extends Fragment {
 
 
     }
-    public void showDialog(Activity activity, Trips trip){
+  
+    public void showDialog(Activity activity,Trips trip){
 
         dialog = new Dialog(activity);
         dialog.setCancelable(false);
@@ -209,8 +223,8 @@ public class Upcoming extends Fragment {
         dialog.setContentView(R.layout.note_dialog);
 
         ImageView btnCancel= (ImageView) dialog.findViewById(R.id.img_cancel);
-        FloatingActionButton addNoteBtn=(FloatingActionButton) dialog.findViewById(R.id.addNoteBtn);
-        FloatingActionButton saveNoteBtn=(FloatingActionButton) dialog.findViewById(R.id.saveNoteBtn);
+        Button addNoteBtn=(Button) dialog.findViewById(R.id.addNoteBtn);
+        Button saveNoteBtn=(Button) dialog.findViewById(R.id.saveNoteBtn);
         EditText notetxt=(EditText) dialog.findViewById(R.id.type_note_txt);
         RecyclerView recyclerView = dialog.findViewById(R.id.recycler);
         notesAdapter adapterRe = new notesAdapter(getContext(),noteList);
@@ -242,6 +256,7 @@ public class Upcoming extends Fragment {
                 Log.i("note","nossssss"+noteList);
                 adapterRe.notifyDataSetChanged();
                 notetxt.setVisibility(View.INVISIBLE);
+                notetxt.setText("");
                 saveNoteBtn.setVisibility(View.INVISIBLE);
                 addNoteBtn.setVisibility(View.VISIBLE);
 
@@ -250,8 +265,8 @@ public class Upcoming extends Fragment {
 
         dialog.show();
     }
-    private AlertDialog AskOption(Trips trip)
-    {
+
+    private AlertDialog AskOption(Trips trip) {
         AlertDialog myQuittingDialogBox = new AlertDialog.Builder(getContext())
                 // set message, title, and icon
                 .setTitle("Delete")
@@ -286,3 +301,4 @@ public class Upcoming extends Fragment {
 
     }
 }
+   }

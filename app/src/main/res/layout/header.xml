@@ -18,7 +18,7 @@
             android:id="@+id/profile_image"
             android:layout_width="113dp"
             android:layout_height="121dp"
-            android:src="@drawable/profile"
+            android:src="@drawable/icon2"
             app:civ_border_color="#FF000000"
             app:civ_border_width="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -40,6 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:text="Hello,"
+            android:layout_marginStart="10dp"
             android:textColor="@color/black"
             android:textSize="25dp" />
 
@@ -49,17 +50,16 @@
             android:layout_height="wrap_content"
             android:text="Faa"
             android:textSize="23dp"
-            android:textColor="@color/projectColor"/>
+            android:textColor="#2A6FEA"/>
     </LinearLayout>
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        style="?android:attr/listSeparatorTextViewStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:background="@color/light_grey"
-        android:layout_marginTop="20dp"
-        />
+        android:layout_marginStart="10dp"
+        android:textSize="18dp"
+        android:text="Faa123@gmail.com" />
 
 
 </LinearLayout>

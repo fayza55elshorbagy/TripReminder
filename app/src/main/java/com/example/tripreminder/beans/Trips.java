@@ -7,6 +7,11 @@ import androidx.room.PrimaryKey;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ListIterator;
 
 @Entity (tableName = "Trips")
 public class Trips implements Serializable {
@@ -55,6 +60,14 @@ public class Trips implements Serializable {
         return notes;
     }
 
+    public void setNotesList(List<String> notes) {
+        String allnotes="";
+        for (String v:notes) {
+            allnotes+=v+"#";
+        }
+        this.notes = allnotes;
+    }
+
     public String getNotes() {
         return notes;
     }
@@ -87,6 +100,10 @@ public class Trips implements Serializable {
     public String getStartLoc() {
         return startPoint;
     }
+
+    public String getStartLoc() {
+        return startPoint;
+    }
     public void setStartPoint(String startPoint) {
         this.startPoint = startPoint;
     }
@@ -101,6 +118,26 @@ public class Trips implements Serializable {
 
     public void setEndPoint(String endPoint) {
         this.endPoint = endPoint;
+    }
+
+    public String getStartLat() {
+        String [] split=startPoint.split("#");
+        return split[1];
+    }
+
+    public String getStartLng() {
+        String [] split=startPoint.split("#");
+        return split[2];
+    }
+
+    public String getEndLat() {
+        String [] split=endPoint.split("#");
+        return split[1];
+    }
+
+    public String getEndLng() {
+        String [] split=endPoint.split("#");
+        return split[2];
     }
 
     public int getStatus() {

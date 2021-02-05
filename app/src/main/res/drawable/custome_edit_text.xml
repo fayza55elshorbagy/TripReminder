@@ -22,7 +22,8 @@
 
 
             <gradient android:startColor="#00c4c7a9" android:endColor="#00d6dadf" android:angle="270" />
-            <stroke  android:width="2px" android:color="@color/proj_color1" />
+
+            <stroke  android:width="2px" android:color="@color/icon_color" />
             <corners android:radius="2dp" />
 
         </shape>

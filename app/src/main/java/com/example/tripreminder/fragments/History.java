@@ -11,6 +11,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -25,6 +32,25 @@ import com.example.tripreminder.adapters.notesAdapter;
 import com.example.tripreminder.beans.HistoryListener;
 import com.example.tripreminder.beans.Trips;
 import com.example.tripreminder.roomDB.TripsViewModel;
+
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.example.tripreminder.R;
+import com.example.tripreminder.adapters.HistoryAdapter;
+import com.example.tripreminder.adapters.UpcomingTripAdapter;
+import com.example.tripreminder.adapters.notesAdapter;
+import com.example.tripreminder.addTripActivity;
+import com.example.tripreminder.beans.HistoryListener;
+import com.example.tripreminder.beans.TripListener;
+import com.example.tripreminder.beans.Trips;
+import com.example.tripreminder.roomDB.TripsViewModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +111,8 @@ public class History extends Fragment {
             @Override
             public void delete(Trips trip) {
                 viewModel.delete(trip);
+                AlertDialog diaBox = AskOption(trip);
+                diaBox.show();
             }
             @Override
             public void showNote(Trips trip){
@@ -100,7 +128,7 @@ public class History extends Fragment {
         dialog = new Dialog(activity);
         dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-       // dialog.setContentView(R.layout.history_note);
+        dialog.setContentView(R.layout.history_note);
 
         ImageView btnCancel= (ImageView) dialog.findViewById(R.id.img_cancel);
         RecyclerView recyclerView = dialog.findViewById(R.id.recycler);
@@ -117,5 +145,33 @@ public class History extends Fragment {
         });
         dialog.show();
 
+    }
+
+    private AlertDialog AskOption(Trips trip) {
+        AlertDialog myQuittingDialogBox = new AlertDialog.Builder(getContext())
+                // set message, title, and icon
+                .setTitle("Delete")
+                .setMessage("Do you want to Delete")
+                .setIcon(R.drawable.ic_baseline_delete_forever_24)
+
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        //your deleting code
+                        viewModel.delete(trip);
+                        dialog.dismiss();
+                    }
+
+                })
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+
+                    }
+                })
+                .create();
+
+        return myQuittingDialogBox;
     }
 }

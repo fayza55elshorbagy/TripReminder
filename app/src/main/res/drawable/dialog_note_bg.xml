@@ -2,7 +2,8 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
 
 
-    <stroke android:width="10px" android:color="@color/proj_color1" />
+
+    <stroke android:width="10px" android:color="@color/icon_color" />
     <corners
         android:radius="20dp" />
     <padding
