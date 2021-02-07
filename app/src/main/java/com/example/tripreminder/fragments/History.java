@@ -1,8 +1,11 @@
 package com.example.tripreminder.fragments;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
@@ -24,6 +27,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.tripreminder.NotificationReceiver;
 import com.example.tripreminder.R;
 import com.example.tripreminder.adapters.HistoryAdapter;
 import com.example.tripreminder.adapters.UpcomingTripAdapter;
@@ -37,6 +41,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.tripreminder.DialogActivity.notificationIntentKey;
 
 public class History extends Fragment {
     RecyclerView recyclerView;
@@ -95,6 +101,7 @@ public class History extends Fragment {
             public void delete(Trips trip) {
                 AlertDialog diaBox = AskOption(trip);
                 diaBox.show();
+                cancelAlarm(trip.getId());
             }
             @Override
             public void showNote(Trips trip){
@@ -154,5 +161,14 @@ public class History extends Fragment {
                 .create();
 
         return myQuittingDialogBox;
+    }
+    private void cancelAlarm(int requestCode) {
+        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        Intent broadcastIntent= new Intent(getContext(), NotificationReceiver.class);
+        broadcastIntent.putExtra(notificationIntentKey,"say goodbye to your data");
+        PendingIntent pendingBroadcastIntent=PendingIntent.getBroadcast(getContext(),requestCode,
+                broadcastIntent,0);
+        alarmManager.cancel(pendingBroadcastIntent);
+
     }
 }

@@ -1,8 +1,11 @@
 package com.example.tripreminder.fragments;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
@@ -25,6 +28,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.tripreminder.DialogActivity;
+import com.example.tripreminder.NotificationReceiver;
 import com.example.tripreminder.R;
 import com.example.tripreminder.adapters.UpcomingTripAdapter;
 import com.example.tripreminder.addTripActivity;
@@ -35,7 +40,9 @@ import com.example.tripreminder.roomDB.TripsViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import static com.example.tripreminder.DialogActivity.notificationIntentKey;
 
 public class Upcoming extends Fragment {
 
@@ -70,7 +77,7 @@ public class Upcoming extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(getContext(), addTripActivity.class);
-                startActivityForResult(intent,1);
+                startActivity(intent);
             }
         });
 
@@ -82,6 +89,7 @@ public class Upcoming extends Fragment {
                 for (Trips t:trips) {
                     if(t.getStatus()==0)
                         upcomingTrips.add(t);
+                    //Log.i("ola","up"+t.getEndLat()+"  "+t.getEndLng());
                 }
                 adapter.saveTrips(upcomingTrips);
                 Log.i("note","ol  "+trips.toString());
@@ -114,6 +122,7 @@ public class Upcoming extends Fragment {
                 intent.putExtra(addTripActivity.TRIP_ID,trip.getId());
                 startActivity(intent);
                 Toast.makeText(getContext(), "you clicked on edit", Toast.LENGTH_SHORT).show();
+                cancelAlarm(trip.getId());
 
             }
 
@@ -121,6 +130,7 @@ public class Upcoming extends Fragment {
             public void delete(Trips trip) {
                 AlertDialog diaBox = AskOption(trip);
                 diaBox.show();
+                cancelAlarm(trip.getId());
 
 
             }
@@ -134,6 +144,7 @@ public class Upcoming extends Fragment {
             public void cancel(Trips trip) {
                 trip.setStatus(1);
                 viewModel.update(trip);
+               cancelAlarm(trip.getId());
 
             }
 
@@ -222,5 +233,15 @@ public class Upcoming extends Fragment {
                 .create();
 
         return myQuittingDialogBox;
+    }
+    private void cancelAlarm(int requestCode) {
+        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        Intent broadcastIntent= new Intent(getContext(),NotificationReceiver.class);
+        broadcastIntent.putExtra(notificationIntentKey,"say goodbye to your data");
+        PendingIntent pendingBroadcastIntent=PendingIntent.getBroadcast(getContext(),requestCode,
+                broadcastIntent,0);
+        alarmManager.cancel(pendingBroadcastIntent);
+        pendingBroadcastIntent.cancel();
+
     }
    }

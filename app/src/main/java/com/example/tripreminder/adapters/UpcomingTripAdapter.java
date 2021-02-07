@@ -39,8 +39,8 @@ public class UpcomingTripAdapter extends RecyclerView.Adapter<UpcomingTripAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Trips trip = trips.get(position);
         holder.title.setText(trip.getName());
-        holder.from.setText(trip.getStartPoint());
-        holder.to.setText(trip.getEndPoint());
+        holder.from.setText(trip.getStartLoc());
+        holder.to.setText(trip.getEndLoc());
         holder.date.setText(trip.getDate());
         holder.time.setText(trip.getTime());
        // holder.type.setText(trip.getType());

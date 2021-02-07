@@ -1,54 +1,111 @@
 package com.example.tripreminder;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.lifecycle.ViewModelProviders;
+
+import com.example.tripreminder.beans.Trips;
+import com.example.tripreminder.roomDB.TripsViewModel;
+
+import java.text.DateFormat;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 public class DialogActivity extends AppCompatActivity {
     NotificationManagerCompat notificationManagerCompat;
     public static final String notificationIntentKey="notificationIntentKey";
     public static final String channel1ID="chan1";
+    private TripsViewModel viewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dialog);
         notificationManagerCompat= NotificationManagerCompat.from(this);
         Log.e("NOTWORKING", "dialog activity");
+         Intent intent= getIntent();
+        long TrripId=  intent.getLongExtra("mid",-1);
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(DialogActivity.this);
         /*View view = LayoutInflater.from(DialogActivity.this).inflate(R.layout.activity_hacked,null);
         alertDialog.setView(view);
         alertDialog.create().show();*/
+        viewModel= ViewModelProviders.of(this).get(TripsViewModel.class);
         final MediaPlayer mp = MediaPlayer.create(DialogActivity.this, R.raw.police);
         mp.start();
         mp.setLooping(true);
         alertDialog.setCancelable(false);
+        Handler cancelHandler=new Handler(){
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                super.handleMessage(msg);
+                finish();
+                mp.stop();
+
+            }
+        };
         alertDialog.setTitle("HOLA AMIGO").setMessage("QUE TAL?").setPositiveButton("start", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                try {
+                    Trips l=viewModel.getTripById(TrripId);
+                    new Thread()
+                    {   public void run() {
+                        Trips trip=new Trips(l.getName(),l.getStartPoint(),l.getEndPoint(),2,l.getType(),l.getTime(),l.getDate(),l.getNotes());
+                        trip.setId((int) TrripId);
+                        viewModel.update(trip);
+                        Log.i("insert","alarm1"+l.getId()+"name"+l.getName()+"status"+l.getStatus());
+                        cancelHandler.sendEmptyMessage(0);
+                    }
+                    }.start();
+
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
                 Toast.makeText(DialogActivity.this, "you've clicked start", Toast.LENGTH_SHORT).show();
-                finish();
-                mp.stop();
             }
         }).setNegativeButton("cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+               try {
+                   Trips l=viewModel.getTripById(TrripId);
+                           new Thread()
+                           {       public void run() {
+                                   Trips trip=new Trips(l.getName(),l.getStartPoint(),l.getEndPoint(),1,l.getType(),l.getTime(),l.getDate(),l.getNotes());
+                                   trip.setId((int) TrripId);
+                                   viewModel.update(trip);
+                                   Log.i("insert","alarm1"+l.getId()+"name"+l.getName()+"status"+l.getStatus());
+                                   cancelHandler.sendEmptyMessage(0);
+                               }
+                           }.start();
+
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 Toast.makeText(DialogActivity.this, "you've clicked cancel", Toast.LENGTH_SHORT).show();
-                finish();
-                mp.stop();
             }
         }).setNeutralButton("snooze", new DialogInterface.OnClickListener() {
             @Override
@@ -89,4 +146,5 @@ public class DialogActivity extends AppCompatActivity {
                 .build();
         notificationManagerCompat.notify(1,notification);
     }
+
 }

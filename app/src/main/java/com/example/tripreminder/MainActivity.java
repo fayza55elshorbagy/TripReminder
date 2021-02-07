@@ -12,21 +12,22 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.tripreminder.beans.Trips;
@@ -47,6 +48,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import static com.example.tripreminder.DialogActivity.notificationIntentKey;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     EditText name;
     DatabaseReference databaseReference;
@@ -61,12 +64,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     FirebaseUser currentUser;
     Toolbar toolBar;
     FloatingActionButton addBtn;
+    public static ProgressBar progressBar_up;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        progressBar_up = findViewById(R.id.progressBar_up);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if(!Settings.canDrawOverlays(this)) {
@@ -136,9 +141,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if(id ==R.id.logout)
         {
+            viewModel.deleteAllTrips();
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(getApplicationContext(),SignIn.class));
             finish();
+
         }
         if(id == R.id.upComing)
         {
@@ -236,4 +243,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else
             Toast.makeText(MainActivity.this, "" + "Error" , Toast.LENGTH_SHORT).show();
     }
+
+
+
 }

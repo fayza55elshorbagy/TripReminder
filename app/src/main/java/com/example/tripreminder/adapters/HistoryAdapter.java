@@ -45,8 +45,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
         Trips trip = trips.get(position);
         holder.title.setText(trip.getName());
-        holder.from.setText(trip.getStartPoint());
-        holder.to.setText(trip.getEndPoint());
+        holder.from.setText(trip.getStartLoc());
+        holder.to.setText(trip.getEndLoc());
         holder.date.setText(trip.getDate());
         holder.time.setText(trip.getTime());
         //holder.type.setText(trip.getType());
@@ -57,9 +57,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
         holder.del.setOnClickListener(v -> tripListener.delete(trips.get(position)));
         holder.note.setOnClickListener(v -> tripListener.showNote(trips.get(position)));
-
-
-
     }
     public void saveTrips(List<Trips> trips) {
         this.trips = trips;
