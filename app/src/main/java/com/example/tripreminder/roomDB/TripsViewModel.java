@@ -23,6 +23,10 @@ public class TripsViewModel extends AndroidViewModel {
     public long insert(Trips trips) {
       return  mRepository.insert(trips);
     }
+    public void insertAll(List<Trips> trips) {
+         mRepository.insertAll(trips);
+
+    }
     public void delete(Trips trips) {
         mRepository.delete(trips);
     }
@@ -37,4 +41,4 @@ public class TripsViewModel extends AndroidViewModel {
     }
     public List<Trips> getAll() throws ExecutionException, InterruptedException { return mRepository.getAll(); }
     public Trips getTripById(long id) throws ExecutionException, InterruptedException { return mRepository.getTripById(id); }
-}
+}}

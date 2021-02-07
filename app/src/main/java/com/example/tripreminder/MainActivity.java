@@ -14,6 +14,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
@@ -33,6 +39,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.tripreminder.fragments.History;
@@ -59,6 +66,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import static com.example.tripreminder.DialogActivity.notificationIntentKey;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public static Dialog dialog;
     NavigationView navigationView;
@@ -73,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     FirebaseUser currentUser;
     Toolbar toolBar;
     FloatingActionButton addBtn;
+    public static ProgressBar progressBar_up;
+
     FirebaseAuth firebaseAuth;
     int PREMISSION_ID = 100;
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -83,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        progressBar_up = findViewById(R.id.progressBar_up);
         Log.i("click","Main");
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getlocation();
@@ -157,10 +169,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.logout) {
+        if(id ==R.id.logout)
+        {
+            viewModel.deleteAllTrips();
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(getApplicationContext(), SignIn.class));
             finish();
+
         }
 
         if(id == R.id.upComing)

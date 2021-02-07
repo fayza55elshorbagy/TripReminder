@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
@@ -32,7 +33,6 @@ import com.example.tripreminder.roomDB.TripsViewModel;
 import java.text.DateFormat;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-
 import static java.lang.Double.parseDouble;
 
 
@@ -41,6 +41,7 @@ public class DialogActivity extends AppCompatActivity {
     public static final String notificationIntentKey="notificationIntentKey";
     public static final String channel1ID="chan1";
     private TripsViewModel viewModel;
+
     double endLatitude;
     double endLongitude;
     private int MY_PERMISSION = 100;
@@ -76,6 +77,7 @@ public class DialogActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 try {
                     Trips l=viewModel.getTripById(TrripId);
+
                     endLatitude = parseDouble(l.getEndLat());
                     endLongitude = parseDouble(l.getEndLng());
                     Log.i("click",endLatitude+"+++++++"+endLongitude);
@@ -110,6 +112,7 @@ public class DialogActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
                 startGoogleActivityFromdialog();
                 Toast.makeText(DialogActivity.this, "you've clicked start", Toast.LENGTH_SHORT).show();
             }
@@ -217,6 +220,7 @@ public class DialogActivity extends AppCompatActivity {
                 .build();
         notificationManagerCompat.notify(1,notification);
     }
+
 
     @Override
     protected void onDestroy() {

@@ -2,6 +2,7 @@ package com.example.tripreminder.beans;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
@@ -26,10 +27,11 @@ public class Trips implements Serializable {
     private String time;
     private String date;
     private String notes;
-    public Trips()
-    {
+   
+    @Ignore
+    public Trips(){}
 
-    }
+    
     public Trips(String name, String startPoint, String endPoint, int status, int type, String time, String date,String notes) {
         this.name = name;
         this.startPoint = startPoint;

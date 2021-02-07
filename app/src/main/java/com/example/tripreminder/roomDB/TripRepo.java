@@ -29,6 +29,9 @@ public class TripRepo {
         //operation
         //insert
          public long insert(Trips trips) { return mTripDao.insert(trips); }
+         //insert all
+        public void insertAll(List<Trips>trips) { new InsertAllAsyncTask(mTripDao).execute(trips);}
+
         //delete
         public void delete(Trips trips)
         {
@@ -95,9 +98,9 @@ public class TripRepo {
 }
     private static class DeleteAllTripsAsyncTask extends AsyncTask<Void, Void, Void>{
     private TripDAo mTripsDao;
-    public DeleteAllTripsAsyncTask(TripDAo wordsDao)
+    public DeleteAllTripsAsyncTask(TripDAo tripDao)
     {
-        mTripsDao = wordsDao;
+        mTripsDao = tripDao;
     }
     @Override
     protected Void doInBackground(Void... voids) {
@@ -129,6 +132,19 @@ public class TripRepo {
             return mAsyncTaskDao.getTripById(id[0]);
         }
     }
+    private static class InsertAllAsyncTask extends AsyncTask<List<Trips>, Void, Void>{
+        private TripDAo mAsyncTaskDao;
+
+        InsertAllAsyncTask(TripDAo dao) {
+            mAsyncTaskDao = dao;
+        }
+        @Override
+        protected Void doInBackground(List<Trips>... lists) {
+            mAsyncTaskDao.insertAll(lists[0]);
+            return null;
+        }
+    }
+
 }
 
 
