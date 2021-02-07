@@ -2,31 +2,20 @@ package com.example.tripreminder;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.TextUtils;
-import android.util.Patterns;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
+import android.util.Log;
 import android.widget.Toast;
 
-import com.example.tripreminder.firebase.FireBaseData;
+import com.example.tripreminder.beans.Trips;
 import com.example.tripreminder.firebase.ReadData;
 import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,7 +26,7 @@ public class SignIn extends AppCompatActivity {
     private static int AUTH_REC = 12;
     FirebaseAuth.AuthStateListener listener;
     List<AuthUI.IdpConfig> providers;
-    ArrayList<FireBaseData> arr;
+    ArrayList<Trips> arr;
     public static Handler fireBaseReadHandler;
     public static Thread readFireBaseThread;
 
@@ -56,11 +45,12 @@ public class SignIn extends AppCompatActivity {
             @Override
             public void handleMessage(@NonNull Message msg) {
                 super.handleMessage(msg);
-                arr = (ArrayList<FireBaseData>) msg.obj;
+                arr = (ArrayList<Trips>) msg.obj;
                 if(arr.size() == 0){
                     Toast.makeText(SignIn.this, "You don't have data", Toast.LENGTH_SHORT).show();
                 }else {
                     System.out.println("the result after thread :  " + arr.size() + "");
+                    Log.i("click",""+arr);
                     // System.out.println("the first note of first element :  " + TotalUserData.get(1).getNotes().get(2) + "");
                 }
             }
@@ -80,15 +70,17 @@ public class SignIn extends AppCompatActivity {
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         if(firebaseUser != null)
         {
-            //Toast.makeText(SignIn.this, "You already logged in before.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SignIn.this, "not nulll.", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(getApplicationContext(),MainActivity.class));
             finish();
         }
         else
         {
+            Toast.makeText(SignIn.this, "signinui.", Toast.LENGTH_SHORT).show();
             startActivityForResult(AuthUI.getInstance()
                     .createSignInIntentBuilder()
                     .setAvailableProviders(providers)
+                    //.setIsSmartLockEnabled(false)
                     .build(),AUTH_REC);
         }
     }
@@ -100,11 +92,30 @@ public class SignIn extends AppCompatActivity {
         if(requestCode == AUTH_REC)
         {
             if(requestCode ==RESULT_OK) {
+                Toast.makeText(SignIn.this, "okk.", Toast.LENGTH_SHORT).show();
                 Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
                 finish();
 
             }
             else {
+
+                Toast.makeText(SignIn.this, "notok", Toast.LENGTH_SHORT).show();
+                Thread s = new Thread()
+                {
+                    @Override
+                    public void run() {
+                        super.run();
+                        try {
+                            sleep(3*1000);
+                            readFireBaseThread.start();
+                            //remove Activity
+                            //finish();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                s.start();
                 finish();
             }
         }

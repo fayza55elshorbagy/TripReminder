@@ -61,7 +61,6 @@ public class SignUp extends AppCompatActivity {
         currentUser = firebaseAuth.getCurrentUser();
             if(currentUser != null)
             {
-                //SignIn.readFireBaseThread.start();
                 startActivity(new Intent(getApplicationContext(),MainActivity.class));
                 finish();
             }

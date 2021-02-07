@@ -5,17 +5,10 @@
     <string name="endPoint">End Point</string>
     <string name="start_details">Start Details</string>
     <string name="Trip_type">Trip Type</string>
-    <string name="repeating">Repeating</string>
 
     <string name="navigation_drawer_open">open navigation drawer</string>
     <string name="navigation_drawer_close">close navigation drawer</string>
 
-    <string-array name="repeating_options">
-        <item>No Repeat</item>
-        <item>Repeat Daily</item>
-        <item>Repeat weekly</item>
-        <item>Repeat Monthly</item>
-    </string-array>
 
     <string-array name="trip_options">
         <item>One Way Trip</item>
@@ -33,6 +26,7 @@
     <string name="start">Start</string>
     <string name="title_activity_poly">PolyActivity</string>
     <string name="maps_api_key">\"AIzaSyALHrPpUa1o9Hc-6zTue0nt_CgM0tJa_pc\"</string>
+    <string name="round_trip">Back details</string>
 
 
 </resources>

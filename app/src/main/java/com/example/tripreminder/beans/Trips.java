@@ -5,8 +5,6 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,32 +19,35 @@ public class Trips implements Serializable {
     private String name;
     private String startPoint;
     private String endPoint;
-
     //0-upcoming . 1- cancel . 2-done
     private int status;
-    private String type;
-    private String repeating;
+    // 0-single 1-round
+    private int type;
     private String time;
     private String date;
     private String notes;
+    public Trips()
+    {
 
-    public Trips(String name, String startPoint, String endPoint, int status, String type, String repeating, String time, String date,String notes) {
+    }
+    public Trips(String name, String startPoint, String endPoint, int status, int type, String time, String date,String notes) {
         this.name = name;
         this.startPoint = startPoint;
         this.endPoint = endPoint;
         this.status = status;
         this.type = type;
-        this.repeating = repeating;
         this.time = time;
         this.date = date;
         this.notes=notes;
     }
+
+
     public String allNotes(List<String> notes) {
         String allnotes="";
         for (String v:notes) {
             allnotes+=v+"#";
         }
-      return allnotes;
+        return allnotes;
     }
 
     public ArrayList<String> getNotesList() {
@@ -54,7 +55,7 @@ public class Trips implements Serializable {
         ArrayList<String> notes=new ArrayList<>();
         for (String n:note) {
             if(n!="")
-            notes.add(n);
+                notes.add(n);
         }
 
         return notes;
@@ -76,14 +77,6 @@ public class Trips implements Serializable {
         this.notes = notes;
     }
 
-    public void setNotesList(List<String> notes) {
-        String allnotes="";
-        for (String v:notes) {
-            allnotes+=v+"#";
-        }
-        this.notes = allnotes;
-    }
-
     public String getName() {
         return name;
     }
@@ -92,34 +85,14 @@ public class Trips implements Serializable {
         this.name = name;
     }
 
-    public String getStartPoint() {
+    public String getStartLoc() {
         String [] split=startPoint.split("#");
         return split[0];
     }
-
-    public String getStartLoc() {
-        return startPoint;
-    }
-
-    public String getStartLoc() {
-        return startPoint;
-    }
-    public void setStartPoint(String startPoint) {
-        this.startPoint = startPoint;
-    }
-
-    public String getEndPoint() {
+    public String getEndLoc() {
         String [] split1=endPoint.split("#");
         return split1[0];
     }
-    public String getEndLoc() {
-        return endPoint;
-    }
-
-    public void setEndPoint(String endPoint) {
-        this.endPoint = endPoint;
-    }
-
     public String getStartLat() {
         String [] split=startPoint.split("#");
         return split[1];
@@ -140,6 +113,26 @@ public class Trips implements Serializable {
         return split[2];
     }
 
+
+    public String getStartPoint() {
+        return startPoint;
+    }
+
+    public void setStartPoint(String startPoint) {
+        this.startPoint = startPoint;
+    }
+
+
+    public String getEndPoint() {
+        return endPoint;
+    }
+
+    public void setEndPoint(String endPoint) {
+        this.endPoint = endPoint;
+    }
+
+
+
     public int getStatus() {
         return status;
     }
@@ -148,20 +141,12 @@ public class Trips implements Serializable {
         this.status = status;
     }
 
-    public String getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(int type) {
         this.type = type;
-    }
-
-    public String getRepeating() {
-        return repeating;
-    }
-
-    public void setRepeating(String repeating) {
-        this.repeating = repeating;
     }
 
     public String getTime() {
@@ -193,7 +178,6 @@ public class Trips implements Serializable {
                 ", endPoint='" + endPoint + '\'' +
                 ", status='" + status + '\'' +
                 ", type='" + type + '\'' +
-                ", repeating='" + repeating + '\'' +
                 ", time='" + time + '\'' +
                 ", date='" + date + '\'' +
                 ", notes='" + notes + '\'' +

@@ -1,5 +1,6 @@
 package com.example.tripreminder;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Service;
@@ -41,8 +42,9 @@ public class bubbleService extends Service {
     private WindowManager windowManager;
     private GestureDetector gestureDetector;
     ArrayList<String> noteList = new ArrayList<>();
-    HistoryListener notesListener;
-
+    String[] Notes;
+    Boolean[] ch ;
+    public static final String ACTION_START = "com.floatingwidgetchathead_demo.SampleService.ACTION_START";
     public bubbleService() {
     }
 
@@ -51,11 +53,30 @@ public class bubbleService extends Service {
         return null;
     }
 
+    @SuppressLint("LogConditional")
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        String action = intent.getAction();
+        //NoteList = intent.getStringArrayListExtra("NoteList");
+        //System.out.println("ACTION: "+action);
+        switch (action){
+            case ACTION_START:
+                Log.i("click", "onStartCommand: "+action);
+                startingService(intent.getStringArrayListExtra("Intent"));
+                break;
+        }
+        return START_STICKY;
+
+    }
     @Override
     public void onCreate() {
         super.onCreate();
-        noteList=new ArrayList<>();
-        initNoteListener();
+    }
+
+    public void startingService(ArrayList<String> value){
+       // Log.i("click",value.get(0));
+
+        Notes = ArrayListTOArray(value);
 
         gestureDetector = new GestureDetector(this, new SingleTapConfirm());
         bubbleLayout = (BubbleLayout) LayoutInflater.from(this).inflate(R.layout.bubble_layout,null);
@@ -126,13 +147,10 @@ public class bubbleService extends Service {
     }
 
    public void showDialog(){
-
        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Dialog);
        dialogBuilder.setTitle("Notes");
        // Add a checkbox list
-       String[] animals = {"Note1", "Note2", "Note3", "Note4", "Note5"};
-       boolean[] checkedItems = {true, false, false, true, false};
-       dialogBuilder.setMultiChoiceItems(animals, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+       dialogBuilder.setMultiChoiceItems(Notes,null, new DialogInterface.OnMultiChoiceClickListener() {
            @Override
            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
                // The user checked or unchecked a box
@@ -170,6 +188,21 @@ public class bubbleService extends Service {
         bubbleLayout.setVisibility(View.INVISIBLE);
     }
 
+    public String[] ArrayListTOArray (ArrayList<String> arr){
+            /*ArrayList to Array Conversion */
+            String array[] = new String[arr.size()];
+            for(int j =0;j<arr.size();j++){
+                array[j] = arr.get(j);
+            }
+
+            /*Displaying Array elements*/
+            for(String k: array)
+            {
+                System.out.println(k);
+            }
+            return array;
+        }
+
     private class SingleTapConfirm extends GestureDetector.SimpleOnGestureListener {
 
         @Override
@@ -178,22 +211,4 @@ public class bubbleService extends Service {
         }
     }
 
-    private void initNoteListener() {
-          Log.i("click","init");
-          notesListener = new HistoryListener() {
-            @Override
-            public void delete(Trips trip) {
-            }
-            @Override
-            public void showNote(Trips trip){
-                noteList=trip.getNotesList();
-
-            for(int i = 0; i < noteList.size();i++)
-            {
-            Log.i("click","data : "+noteList.get(i));
-            }
-            }
-
-        };
-    }
 }

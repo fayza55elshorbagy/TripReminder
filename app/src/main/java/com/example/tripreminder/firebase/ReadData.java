@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.example.tripreminder.MainActivity;
 import com.example.tripreminder.SignIn;
+import com.example.tripreminder.beans.Trips;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,7 +22,7 @@ public class ReadData implements Runnable {
     @Override
     public void run() {
         DatabaseReference mDatabase;
-        ArrayList<FireBaseData> returnedData = new ArrayList<>();
+        ArrayList<Trips> returnedData = new ArrayList<>();
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid() ;
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("Trips").child("0");
         mDatabase.addValueEventListener(new ValueEventListener() {
@@ -29,7 +30,7 @@ public class ReadData implements Runnable {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Message Msg = Message.obtain();
                 for (DataSnapshot ds : snapshot.getChildren()) {
-                    FireBaseData user = ds.getValue(FireBaseData.class);
+                    Trips user = ds.getValue(Trips.class);
                     //System.out.println(user.getEndPoint());
                     returnedData.add(user);
                 }
