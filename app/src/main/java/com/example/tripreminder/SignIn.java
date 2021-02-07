@@ -42,7 +42,6 @@ public class SignIn extends AppCompatActivity {
     public static Thread readFireBaseThread;
     private TripsViewModel viewModel;
 
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -170,6 +169,7 @@ public class SignIn extends AppCompatActivity {
                 broadcastIntent,0);
         alarmManager.cancel(pendingBroadcastIntent);
         pendingBroadcastIntent.cancel();
+
 
     }
 }

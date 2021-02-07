@@ -31,6 +31,7 @@ public class TripRepo {
          public long insert(Trips trips) { return mTripDao.insert(trips); }
          //insert all
         public void insertAll(List<Trips>trips) { new InsertAllAsyncTask(mTripDao).execute(trips);}
+
         //delete
         public void delete(Trips trips)
         {
@@ -143,6 +144,7 @@ public class TripRepo {
             return null;
         }
     }
+
 }
 
 

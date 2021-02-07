@@ -16,17 +16,26 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.TripReminder">
+        android:theme="@style/Theme.TripReminder"
+        >
+
+        <service
+            android:name=".bubbleService"
+            android:enabled="true"
+            android:exported="true" />
+
+
+        <activity android:name=".SignIn" />
+        <activity android:name=".SignUp" />
+        <activity android:name=".headeractivity" />
+        <activity android:name=".SplashScreen"/>
+
         <activity android:name=".DialogActivity"
             android:theme="@style/Theme.AppCompat.Transparent.NoActionBar"
              />
         <activity android:name=".addTripActivity" />
-        <activity android:name=".SignUp" />
-        <activity android:name=".SignIn" />
-        <activity android:name=".headeractivity" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".SplashScreen">
 
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

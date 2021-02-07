@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.TripReminder" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.TripReminder" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/textColor</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -13,4 +13,16 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+    <style name="AppTheme.MaterialDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorPrimary">@color/proj_color1</item>
+        <item name="colorPrimaryDark">@color/proj_color1</item>
+        <item name="colorAccent">@color/proj_color1</item>
+
+        <item name="android:windowBackground">@drawable/ic_launcher_foreground</item>
+
+        <item name="android:textColorPrimary">@color/proj_color1</item>
+        <item name="android:textColorSecondary">@color/proj_color1</item>
+        <item name="android:textColorTertiary">@color/proj_color1</item>
+    </style>
+
 </resources>

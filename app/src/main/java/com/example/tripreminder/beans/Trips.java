@@ -27,9 +27,11 @@ public class Trips implements Serializable {
     private String time;
     private String date;
     private String notes;
-
+   
     @Ignore
     public Trips(){}
+
+    
     public Trips(String name, String startPoint, String endPoint, int status, int type, String time, String date,String notes) {
         this.name = name;
         this.startPoint = startPoint;
@@ -47,7 +49,7 @@ public class Trips implements Serializable {
         for (String v:notes) {
             allnotes+=v+"#";
         }
-      return allnotes;
+        return allnotes;
     }
 
     public ArrayList<String> getNotesList() {
@@ -55,7 +57,7 @@ public class Trips implements Serializable {
         ArrayList<String> notes=new ArrayList<>();
         for (String n:note) {
             if(n!="")
-            notes.add(n);
+                notes.add(n);
         }
 
         return notes;

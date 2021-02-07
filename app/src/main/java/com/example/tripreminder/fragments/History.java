@@ -2,6 +2,16 @@ package com.example.tripreminder.fragments;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.Dialog;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.Toast;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
@@ -18,6 +28,13 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.tripreminder.R;
+import com.example.tripreminder.adapters.HistoryAdapter;
+import com.example.tripreminder.adapters.notesAdapter;
+import com.example.tripreminder.beans.HistoryListener;
+import com.example.tripreminder.beans.Trips;
+import com.example.tripreminder.roomDB.TripsViewModel;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -99,6 +116,7 @@ public class History extends Fragment {
         itemListener = new HistoryListener() {
             @Override
             public void delete(Trips trip) {
+                viewModel.delete(trip);
                 AlertDialog diaBox = AskOption(trip);
                 diaBox.show();
                 cancelAlarm(trip.getId());
@@ -135,6 +153,7 @@ public class History extends Fragment {
         dialog.show();
 
     }
+
     private AlertDialog AskOption(Trips trip) {
         AlertDialog myQuittingDialogBox = new AlertDialog.Builder(getContext())
                 // set message, title, and icon

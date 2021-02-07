@@ -10,14 +10,18 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -29,6 +33,7 @@ import com.example.tripreminder.roomDB.TripsViewModel;
 import java.text.DateFormat;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import static java.lang.Double.parseDouble;
 
 
 public class DialogActivity extends AppCompatActivity {
@@ -36,6 +41,11 @@ public class DialogActivity extends AppCompatActivity {
     public static final String notificationIntentKey="notificationIntentKey";
     public static final String channel1ID="chan1";
     private TripsViewModel viewModel;
+
+    double endLatitude;
+    double endLongitude;
+    private int MY_PERMISSION = 100;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +77,10 @@ public class DialogActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 try {
                     Trips l=viewModel.getTripById(TrripId);
+
+                    endLatitude = parseDouble(l.getEndLat());
+                    endLongitude = parseDouble(l.getEndLng());
+                    Log.i("click",endLatitude+"+++++++"+endLongitude);
                     new Thread()
                     {   public void run() {
                         Trips trip=new Trips(l.getName(),l.getStartPoint(),l.getEndPoint(),2,l.getType(),l.getTime(),l.getDate(),l.getNotes());
@@ -77,12 +91,29 @@ public class DialogActivity extends AppCompatActivity {
                     }
                     }.start();
 
+                    Thread splash = new Thread()
+                    {
+                        @Override
+                        public void run() {
+                            super.run();
+                            try {
+                                sleep(1000);
+                                checkBubblePermission(l);
+                                finish();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    };
+                    splash.start();
+
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
 
+                startGoogleActivityFromdialog();
                 Toast.makeText(DialogActivity.this, "you've clicked start", Toast.LENGTH_SHORT).show();
             }
         }).setNegativeButton("cancel", new DialogInterface.OnClickListener() {
@@ -118,6 +149,49 @@ public class DialogActivity extends AppCompatActivity {
         });
         alertDialog.show();
     }
+
+    private void startGoogleActivityFromdialog() {
+        //Log.i("click",endLatitude+"++FromGoogle+++"+endLongitude);
+        //Log.i("click",MainActivity.latitude+"+++++++"+MainActivity.longitude);
+        String url = "http://maps.google.com/maps?saddr="
+                + MainActivity.latitude + "," + MainActivity.longitude+ "&daddr=" + endLatitude+ "," + endLongitude;
+            Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(url));
+            intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+            startActivity(intent);
+    }
+    public void checkBubblePermission(Trips trip) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + this.getPackageName()));
+            startActivityForResult(intent, MY_PERMISSION);
+        } else {
+            Log.i("click","**********TripFromCheckPremission");
+            showBubbles(trip);
+        }
+
+    }
+
+    private void showBubbles(Trips trip) {
+        Log.i("click","**********Trip from sending service");
+        Intent i = new Intent(this,bubbleService.class);
+        i.setAction(bubbleService.ACTION_START);
+        i.putStringArrayListExtra("Intent",trip.getNotesList());
+        startService(i);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == MY_PERMISSION) {
+            if (resultCode == RESULT_OK) {
+                //showBubbles(trip);
+            }
+        }
+
+
+    }
+
     private void showNotification(){
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
             NotificationChannel channel1=new NotificationChannel(channel1ID,
@@ -147,4 +221,10 @@ public class DialogActivity extends AppCompatActivity {
         notificationManagerCompat.notify(1,notification);
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopService(new Intent(this,bubbleService.class));
+    }
 }
