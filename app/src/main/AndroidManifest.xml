@@ -19,6 +19,8 @@
         android:theme="@style/Theme.TripReminder">
         <activity android:name=".DialogActivity"
             android:theme="@style/Theme.AppCompat.Transparent.NoActionBar"
+            android:showOnLockScreen="true"
+            android:turnScreenOn="true"
              />
         <activity android:name=".addTripActivity" />
         <activity android:name=".SignIn" />

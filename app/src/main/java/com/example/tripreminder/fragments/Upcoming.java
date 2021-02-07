@@ -1,8 +1,11 @@
 package com.example.tripreminder.fragments;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
@@ -25,6 +28,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.tripreminder.NotificationReceiver;
 import com.example.tripreminder.R;
 import com.example.tripreminder.adapters.UpcomingTripAdapter;
 import com.example.tripreminder.addTripActivity;
@@ -35,7 +39,10 @@ import com.example.tripreminder.roomDB.TripsViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+
+import static com.example.tripreminder.DialogActivity.notificationIntentKey;
 
 public class Upcoming extends Fragment {
 
@@ -91,6 +98,15 @@ public class Upcoming extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Toast.makeText(getContext(), "elsize "+adapter.getTrips().size(), Toast.LENGTH_SHORT).show();
+        for (int i=0;i<adapter.getTrips().size();i++){
+            Log.e("Upcoming",adapter.getTrips().get(i).getDate()+"#@#@"+adapter.getTrips().get(i).getTime());
+        }
+
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -133,6 +149,7 @@ public class Upcoming extends Fragment {
             @Override
             public void cancel(Trips trip) {
                 trip.setStatus(1);
+                cancelAlarm(7);
                 viewModel.update(trip);
 
             }
@@ -222,5 +239,17 @@ public class Upcoming extends Fragment {
                 .create();
 
         return myQuittingDialogBox;
+    }
+
+
+
+    private void cancelAlarm(int requestCode) {
+        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        Intent broadcastIntent= new Intent(getContext(),NotificationReceiver.class);
+        broadcastIntent.putExtra(notificationIntentKey,"say goodbye to your data");
+        PendingIntent pendingBroadcastIntent=PendingIntent.getBroadcast(getContext(),requestCode,
+                broadcastIntent,0);
+        alarmManager.cancel(pendingBroadcastIntent);
+
     }
    }

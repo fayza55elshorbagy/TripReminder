@@ -57,6 +57,10 @@ public class UpcomingTripAdapter extends RecyclerView.Adapter<UpcomingTripAdapte
         notifyDataSetChanged();
     }
 
+    public List<Trips> getTrips() {
+        return trips;
+    }
+
     @Override
     public int getItemCount() {
         return trips.size();

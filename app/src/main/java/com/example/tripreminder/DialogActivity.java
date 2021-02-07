@@ -5,12 +5,14 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +29,8 @@ public class DialogActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dialog);
         notificationManagerCompat= NotificationManagerCompat.from(this);
+
+
         Log.e("NOTWORKING", "dialog activity");
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(DialogActivity.this);
         /*View view = LayoutInflater.from(DialogActivity.this).inflate(R.layout.activity_hacked,null);

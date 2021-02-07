@@ -237,7 +237,7 @@ public class addTripActivity extends AppCompatActivity  {
                         clearText();
                     }
                     Log.e("trip", DateFormat.getDateTimeInstance().format(myCalendar.getTime()));
-                    setAlarm(myCalendar);
+                    setAlarm(myCalendar,7);
 
                 }
 
@@ -349,14 +349,15 @@ public class addTripActivity extends AppCompatActivity  {
 
     }
 
-    private void setAlarm(Calendar calendar) {
+    private void setAlarm(Calendar calendar, int requestCode) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent broadcastIntent= new Intent(addTripActivity.this,NotificationReceiver.class);
-        broadcastIntent.putExtra(notificationIntentKey,"say goodbye to your data");
-        PendingIntent pendingBroadcastIntent=PendingIntent.getBroadcast(addTripActivity.this,7,
-                broadcastIntent,0);
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingBroadcastIntent);
-
+        /*Intent broadcastIntent= new Intent(addTripActivity.this,NotificationReceiver.class);
+        broadcastIntent.putExtra(notificationIntentKey,"say goodbye to your data");*/
+        Intent dialogIntent = new Intent(addTripActivity.this,DialogActivity.class);
+        dialogIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingBroadcastIntent=PendingIntent.getActivity(addTripActivity.this,requestCode,
+                dialogIntent,0);
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingBroadcastIntent);
     }
 
     private void errorWarningForNotGivingDrawOverAppsPermissions(){
