@@ -354,7 +354,7 @@ public class addTripActivity extends AppCompatActivity  {
                 }
             }
         });
-      
+
 
         startPoint.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
