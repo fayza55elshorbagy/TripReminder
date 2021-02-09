@@ -4,14 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.example.tripreminder.beans.Trips;
 import com.example.tripreminder.roomDB.TripsViewModel;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -135,6 +139,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
         map.getUiSettings().setZoomControlsEnabled(true);
+        LatLng latLng = new LatLng( 24.09082,34.89005);
+        Location l = new Location("L");
+        l.setLatitude(24.09082);
+        l.setLongitude(34.89005);
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(5).bearing(l.getBearing()).tilt(45).build();
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+        map.animateCamera(cameraUpdate);
 
     }
 }
