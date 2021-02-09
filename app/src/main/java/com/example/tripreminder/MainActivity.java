@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         menu = findViewById(R.id.nav_view);
         header = menu.getHeaderView(0);
-        email = header.findViewById(R.id.nameUser);
+        email = header.findViewById(R.id.name);
         SharedPreferences writr = getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
         String n = writr.getString("Email","m");
         email.setText(n);
