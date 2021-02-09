@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/addtrip_bg"
+    android:background="@color/purbleApp"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
@@ -16,6 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
+        app:cardElevation="5dp"
+        app:cardUseCompatPadding="true"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="10dp">
         <ScrollView
@@ -33,54 +35,63 @@
                     android:id="@+id/textInputName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:hintTextColor="@color/yellowApp"
                     android:layout_marginTop="10dp">
-
 
                     <EditText
                         android:id="@+id/tripName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:backgroundTint="@color/white"
-                        android:backgroundTintMode="add"
                         android:hint="Trip Name"
                         android:inputType="textPersonName"
                         android:maxLines="1"
-                        android:textSize="12sp" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:textSize="17sp"
+                        android:textCursorDrawable="@drawable/color_cursor"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp">
 
+                    </EditText>
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputstartPoint"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:hintTextColor="@color/yellowApp"
                     android:layout_marginTop="10dp">
 
                     <EditText
                         android:id="@+id/startPoint"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
                         android:hint="Start Point"
                         android:inputType="textPersonName"
-                        android:textSize="12sp" />
+                        android:textSize="17sp"
+                        android:textCursorDrawable="@drawable/color_cursor"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp">
+                    </EditText>
                 </com.google.android.material.textfield.TextInputLayout>
-
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputendPoint"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:hintTextColor="@color/yellowApp"
                     android:layout_marginTop="10dp">
 
                     <EditText
                         android:id="@+id/endPoint"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
                         android:hint="End Point"
                         android:inputType="textPersonName"
-                        android:textSize="12sp" />
+                        android:textSize="17sp"
+                        android:textCursorDrawable="@drawable/color_cursor"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp" >
+                </EditText>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -89,7 +100,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/start_details"
-                    android:textColor="#3B5998"
+                    android:textColor="@color/purbleApp"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="16dp"
                     android:textSize="14dp"
@@ -178,7 +189,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/Trip_type"
-                        android:textColor="#3B5998"
+                        android:textColor="@color/purbleApp"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="16dp"
                         android:textSize="14dp"
@@ -189,6 +200,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:layout_marginTop="13dp"
                         android:layout_marginStart="10dp">
 
                         <RadioButton
@@ -197,7 +209,7 @@
                             android:layout_height="wrap_content"
                             android:text="single"
                             android:checked="true"
-                            android:buttonTint="@color/textColor"
+                            android:buttonTint="@color/purbleApp"
                             android:textColor="@color/black"/>
 
                         <RadioButton
@@ -205,7 +217,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Round"
-                            android:buttonTint="@color/textColor"
+                            android:buttonTint="@color/purbleApp"
                             android:textColor="@color/black"/>
 
                     </RadioGroup>
@@ -225,7 +237,7 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="16dp"
                         android:text="@string/round_trip"
-                        android:textColor="#3B5998"
+                        android:textColor="@color/purbleApp"
                         android:textSize="14dp"
                         android:textStyle="bold" />
                     <LinearLayout
@@ -312,8 +324,10 @@
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/botton_bg"
                     android:text="Add"
+                    android:textSize="18sp"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
                     app:backgroundTint="@null"/>
-
 
             </LinearLayout>
         </ScrollView>

@@ -22,6 +22,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -139,7 +141,8 @@ public class addTripActivity extends AppCompatActivity  {
 
         Intent intentTrip =getIntent();
         if(intentTrip.hasExtra(TRIP_ID)){
-             toolBar.setTitle("Edit Trip");
+             toolBar.setTitle("Edit");
+             addBtn.setText("Save");
              editMode=true;
              editObj= (Trips) getIntent().getSerializableExtra(TRIP_OBJ);
 
@@ -153,17 +156,12 @@ public class addTripActivity extends AppCompatActivity  {
              timeText.setText(editObj.getTime().toString());
              dateText.setText(editObj.getDate().toString());
              trip_type.setVisibility(View.GONE);
-            btnTime.setColorFilter(getResources().getColor(R.color.textColor), PorterDuff.Mode.SRC_ATOP);
-            btnDate.setColorFilter(getResources().getColor(R.color.textColor), PorterDuff.Mode.SRC_ATOP);
-             /*int tripType=editObj.getType();
-            if(tripType==0)
-                single.setChecked(true);
-            else
-                round.setChecked(true);*/
+            btnTime.setColorFilter(getResources().getColor(R.color.purbleApp), PorterDuff.Mode.SRC_ATOP);
+            btnDate.setColorFilter(getResources().getColor(R.color.purbleApp), PorterDuff.Mode.SRC_ATOP);
             }
            else{
                 editMode=false;
-                toolBar.setTitle("Add Trip");
+                toolBar.setTitle("Add");
         }
 
         DatePickerDialog.OnDateSetListener datePicker = new DatePickerDialog.OnDateSetListener() {
@@ -178,7 +176,7 @@ public class addTripActivity extends AppCompatActivity  {
                     currentDate = dateFormant.parse(dateFormant.format(myCurrentCalendar.getTime()));
                     selectedDate = dateFormant.parse(dateFormant.format(myCalendar.getTime()));
                     if (currentDate.before(selectedDate) || currentDate.equals(selectedDate)) {
-                        btnDate.setColorFilter(getResources().getColor(R.color.textColor), PorterDuff.Mode.SRC_ATOP);
+                        btnDate.setColorFilter(getResources().getColor(R.color.purbleApp), PorterDuff.Mode.SRC_ATOP);
                         dateText.setText( dateFormant.format(myCalendar.getTime()));
                        // dateText.setText(dateStr);
                     } else
@@ -203,7 +201,7 @@ public class addTripActivity extends AppCompatActivity  {
                     e.printStackTrace();
                 }
                     if (selectedDate.before(selectedBackDate) || selectedDate.equals(selectedBackDate)) {
-                        btnDateBack.setColorFilter(getResources().getColor(R.color.textColor), PorterDuff.Mode.SRC_ATOP);
+                        btnDateBack.setColorFilter(getResources().getColor(R.color.purbleApp), PorterDuff.Mode.SRC_ATOP);
                         dateBackText.setText( dateFormant.format(backCalendar.getTime()));
                     } else
                         Toast.makeText(addTripActivity.this, "Set valid date", Toast.LENGTH_LONG).show();
@@ -357,13 +355,18 @@ public class addTripActivity extends AppCompatActivity  {
             }
         });
 
-      /* startPoint.addTextChangedListener(new TextWatcher() {
+        endPoint.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME,Place.Field.LAT_LNG);
+                // Start the autocomplete intent.
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
+                        .build(addTripActivity.this);
+                startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE_END);
 
             }
 
@@ -373,7 +376,28 @@ public class addTripActivity extends AppCompatActivity  {
 
             }
         });
-*/
+      startPoint.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME,Place.Field.LAT_LNG);
+                // Start the autocomplete intent.
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
+                        .build(addTripActivity.this);
+                startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE_START);
+
+            }
+
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         startPoint.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
                 List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME,Place.Field.LAT_LNG);
@@ -400,9 +424,9 @@ public class addTripActivity extends AppCompatActivity  {
         boolean isTime=validateTime();
         if (tripName.getText().toString().trim().length() ==0)
             Toast.makeText(addTripActivity.this, "Trip Name Is Empty", Toast.LENGTH_SHORT).show();
-        else if (startPoint.getText().toString().trim().length() == 0)
+        else if (strStartPoint == "")
             Toast.makeText(addTripActivity.this, "Start Point Not Specified", Toast.LENGTH_SHORT).show();
-        else if (endPoint.getText().toString().trim().length() == 0)
+        else if (strEndPoint == "")
             Toast.makeText(addTripActivity.this, "End Point Not Specified", Toast.LENGTH_SHORT).show();
         else if(!isTime)
             Toast.makeText(addTripActivity.this, "Set valid time", Toast.LENGTH_LONG).show();
@@ -513,7 +537,7 @@ public class addTripActivity extends AppCompatActivity  {
             isTimeSelect=true;
             SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm aa");
             timeText.setText( timeFormat.format(myCalendar.getTime()));
-            btnTime.setColorFilter(getResources().getColor(R.color.textColor), PorterDuff.Mode.SRC_ATOP);
+            btnTime.setColorFilter(getResources().getColor(R.color.purbleApp), PorterDuff.Mode.SRC_ATOP);
 
         }
     }, hour, minute, true);//Yes 24 hour time
@@ -528,7 +552,7 @@ public class addTripActivity extends AppCompatActivity  {
                 backCalendar.set(Calendar.MINUTE,selectedMinute);
                 SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm aa");
                 timeBackText.setText( timeFormat.format(backCalendar.getTime()));
-                btnTimeBack.setColorFilter(getResources().getColor(R.color.textColor), PorterDuff.Mode.SRC_ATOP);
+                btnTimeBack.setColorFilter(getResources().getColor(R.color.purbleApp), PorterDuff.Mode.SRC_ATOP);
 
             }
         }, hour, minute, true);//Yes 24 hour time

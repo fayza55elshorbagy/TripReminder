@@ -8,8 +8,9 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="8dp"
+    android:layout_marginTop="5dp"
     android:background="#F3F2F7"
-    card_view:cardElevation="10dp"
+    card_view:cardElevation="14dp"
     card_view:cardUseCompatPadding="true"
     card_view:cardCornerRadius="15dp">
 
@@ -44,15 +45,15 @@
                 android:layout_gravity="end"
                 android:layout_marginEnd="10dp"
                 android:gravity="end"
-                app:backgroundTint="@color/icon_color"
+                app:backgroundTint="@color/grayApp"
                 android:background="@drawable/ic_baseline_delete_forever_24" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -84,11 +85,11 @@
                 android:paddingBottom="4dp">
                 <ImageView
                     android:id="@+id/imageView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginStart="15dp"
-                    card_view:srcCompat="@drawable/ic_baseline_location_on_24" />
+                    card_view:srcCompat="@drawable/location" />
                 <TextView
                     android:id="@+id/toView"
                     android:layout_width="wrap_content"
@@ -166,9 +167,9 @@
                 android:layout_height="30dp"
                 android:layout_marginEnd="4dp"
                 android:layout_marginTop="4dp"
-                app:backgroundTint="@color/icon_color"
+                app:backgroundTint="@color/yellowApp"
                 android:layout_alignParentEnd="true"
-                android:background="@drawable/ic_baseline_sticky_note_2_24" />
+                android:background="@drawable/notepad" />
         </RelativeLayout>
 
 

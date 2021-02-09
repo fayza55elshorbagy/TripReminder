@@ -10,19 +10,23 @@
         <item
             android:id="@+id/upComing"
             android:title="Upcoming"
-            android:icon="@drawable/ic_baseline_edit_24"
+            android:icon="@drawable/upcoming"
             />
         <item
             android:id="@+id/history"
             android:title="History"
             android:icon="@drawable/ic_baseline_history_24"/>
+        <item
+            android:id="@+id/map"
+            android:title="Map routes"
+            android:icon="@drawable/map"/>
     </group>
     <group android:id="@+id/g2"
         android:checkableBehavior="single">
         <item
             android:id="@+id/syncronyize"
             android:title="Sync"
-            android:icon="@drawable/ic_baseline_backup_24"/>
+            android:icon="@drawable/synchronize"/>
         <item
             android:id="@+id/logout"
             android:title="Log Out"

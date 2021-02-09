@@ -37,8 +37,8 @@ public interface TripDAo {
     @Query("select * From Trips where status=0")
     List<Trips> getUpComing();
 
-    @Query("select * From Trips where status=1 and status =2")
-    List<Trips> getHistory();
+    @Query("select * From Trips where status =2")
+    List<Trips> getDoneTrips();
 
     @Query("select * From Trips where Id =:tId")
     Trips getTripById(long tId);

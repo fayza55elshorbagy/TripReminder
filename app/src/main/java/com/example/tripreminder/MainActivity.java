@@ -36,10 +36,12 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.content.ComponentName;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tripreminder.fragments.History;
@@ -80,10 +82,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     TripsViewModel viewModel;
     DatabaseReference rootRef;
     FirebaseUser currentUser;
-    Toolbar toolBar;
     FloatingActionButton addBtn;
     public static ProgressBar progressBar_up;
-
+    TextView title;
+    TextView title1;
     FirebaseAuth firebaseAuth;
     int PREMISSION_ID = 100;
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -99,11 +101,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getlocation();
         mactivity = MainActivity.this;
+         title= (TextView)findViewById(R.id.title);
+         title1= (TextView)findViewById(R.id.title1);
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
 
-        //imageView = (ImageView) findViewById(R.id.menu);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if(!Settings.canDrawOverlays(this)) {
                 checkDrawOverAppsPermissionsDialog();
@@ -119,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         viewModel= ViewModelProviders.of(this).get(TripsViewModel.class);
         navigationView = (NavigationView)findViewById(R.id.nav_view);
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer);
-        toolBar = (Toolbar) findViewById(R.id.toolbar);
+
 
 
         addBtn = (FloatingActionButton)findViewById(R.id.addBtn);
@@ -131,18 +134,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-       /* imageView = (ImageView)findViewById(R.id.menu);
-        //firebaseAuth = FirebaseAuth.getInstance();
+        imageView = (ImageView)findViewById(R.id.menu);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 drawerLayout.openDrawer(Gravity.LEFT);
             }
-        });*/
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolBar,
+        });
+     /*   ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolBar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_open);
         drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
+        toggle.syncState();*/
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(
@@ -171,22 +173,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if(id ==R.id.logout)
         {
-            viewModel.deleteAllTrips();
-            FirebaseAuth.getInstance().signOut();
-            startActivity(new Intent(getApplicationContext(), SignIn.class));
-            finish();
+         AlertDialog diaBox = AskOption();
+            diaBox.show();
+
 
         }
 
         if(id == R.id.upComing)
         {
-            //toolBar.setTitle("UpComing Trips");
+            title.setText("UpComing");
+            title1.setVisibility(View.VISIBLE);
             getSupportFragmentManager().beginTransaction().replace(
                     R.id.fragmentContainer, new Upcoming(), "UpcomingFragment").commit();
         }
         if(id == R.id.history)
         {
-            toolBar.setTitle("History");
+            title.setText("History");
+            title1.setVisibility(View.INVISIBLE);
             getSupportFragmentManager().beginTransaction().replace(
                     R.id.fragmentContainer, new History(), "HistoryFragment").commit();
         }
@@ -199,6 +202,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+        if(id == R.id.map)
+        {
+
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
@@ -277,7 +284,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
         }
         else
-            Toast.makeText(MainActivity.this, "" + "Error" , Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "" + "Error,Please try again later" , Toast.LENGTH_SHORT).show();
     }
 
     public void getlocation() {
@@ -308,7 +315,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         {
                             latitude = location.getLatitude();
                             longitude = location.getLongitude();
-                            Toast.makeText(MainActivity.this,  latitude+ "," + longitude, Toast.LENGTH_LONG).show();
+                            //Toast.makeText(MainActivity.this,  latitude+ "," + longitude, Toast.LENGTH_LONG).show();
 
                         }
 
@@ -357,7 +364,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             longitude = lastLocation.getLongitude();
             Log.i("click",latitude+"insideCallBack"+longitude);
 
-            Toast.makeText(MainActivity.this, latitude+", "+longitude, Toast.LENGTH_LONG).show();
+           // Toast.makeText(MainActivity.this, latitude+", "+longitude, Toast.LENGTH_LONG).show();
         }
     };
 
@@ -384,6 +391,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 getLastLocation();
         }
+    }
+
+    private AlertDialog AskOption() {
+          AlertDialog myQuittingDialogBox = new AlertDialog.Builder(MainActivity.this)
+                // set message, title, and icon
+                .setTitle("Logout")
+                .setMessage("You will lose all set alarms")
+                .setIcon(R.drawable.ic_baseline_login_24)
+                .setPositiveButton("Logout", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        //your deleting code
+                        viewModel.deleteAllTrips();
+                        FirebaseAuth.getInstance().signOut();
+                        startActivity(new Intent(getApplicationContext(), SignIn.class));
+                        finish();
+                        dialog.dismiss();
+                    }
+
+                })
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+
+                    }
+                })
+                .create();
+
+        return myQuittingDialogBox;
     }
 
 }

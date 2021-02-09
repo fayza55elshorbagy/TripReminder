@@ -31,7 +31,7 @@ public class headeractivity extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(firebaseAuth.getCurrentUser().getUid()).child("UserName");
         navigationView = (NavigationView)findViewById(R.id.nav_view);
         View header=navigationView.getHeaderView(0);
-        namesider = (TextView)header.findViewById(R.id.nameUser);
+        namesider = (TextView)header.findViewById(R.id.name);
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

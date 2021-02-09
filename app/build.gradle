@@ -68,8 +68,8 @@ dependencies {
     implementation 'androidx.fragment:fragment:1.2.5'
 
     //bubble
-    compile 'com.txusballesteros:bubbles:1.2.1'
-    compile 'de.hdodenhof:circleimageview:2.1.0'
+    implementation 'com.txusballesteros:bubbles:1.2.1'
+    implementation 'de.hdodenhof:circleimageview:2.1.0'
 
 
 }
