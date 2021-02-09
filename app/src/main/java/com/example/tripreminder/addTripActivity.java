@@ -354,49 +354,7 @@ public class addTripActivity extends AppCompatActivity  {
                 }
             }
         });
-
-        endPoint.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME,Place.Field.LAT_LNG);
-                // Start the autocomplete intent.
-                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
-                        .build(addTripActivity.this);
-                startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE_END);
-
-            }
-
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-      startPoint.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME,Place.Field.LAT_LNG);
-                // Start the autocomplete intent.
-                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
-                        .build(addTripActivity.this);
-                startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE_START);
-
-            }
-
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+      
 
         startPoint.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
