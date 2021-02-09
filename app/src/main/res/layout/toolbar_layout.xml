@@ -5,9 +5,18 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/addtrip_bg"
+    android:background="@color/purbleApp"
     android:minHeight="?attr/actionBarSize"
     android:theme="?attr/actionBarTheme"
     app:titleTextColor="@color/white">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Trip"
+        android:textStyle="bold"
+        android:textColor="@color/yellowApp"
+        android:textSize="20sp">
+
+    </TextView>
 
 </androidx.appcompat.widget.Toolbar>

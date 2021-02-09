@@ -146,8 +146,9 @@ public class SignUp extends AppCompatActivity {
                         Toast.makeText(SignUp.this, "Registeration Done", Toast.LENGTH_SHORT).show();
                         Intent Main = new Intent(getApplicationContext(),MainActivity.class);
                         startActivity(Main);
+                        finish();
                         //SendVerificationMail();
-                         writeUserData();
+                       //  writeUserData();
                     }
                     else
                     {
@@ -167,6 +168,7 @@ public class SignUp extends AppCompatActivity {
 
     private void writeUserData() {
         databaseReference.child("Users").child(firebaseAuth.getCurrentUser().getUid()).child("UserName").setValue(nameString);
+        databaseReference.child("Users").child(firebaseAuth.getCurrentUser().getUid()).child("Email").setValue(emailString);
     }
 /*
     private void SendVerificationMail() {
@@ -188,5 +190,6 @@ public class SignUp extends AppCompatActivity {
     public void signIn(View view) {
         Intent signin = new Intent(getApplicationContext(),SignIn.class);
         startActivity(signin);
+        finish();
     }
 }

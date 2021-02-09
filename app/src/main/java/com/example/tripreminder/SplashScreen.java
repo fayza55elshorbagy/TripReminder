@@ -32,7 +32,7 @@ public class SplashScreen extends AppCompatActivity {
                 super.run();
                 try {
                     sleep(2*1000);
-                    Intent i = new Intent(getApplicationContext(),SignUp.class);
+                    Intent i = new Intent(getApplicationContext(),WelcomeScreen.class);
                     startActivity(i);
                     //remove Activity
                     finish();
@@ -42,27 +42,6 @@ public class SplashScreen extends AppCompatActivity {
             }
         };
         splash.start();
-     /*   write = getSharedPreferences("splash", Context.MODE_PRIVATE);
-
-        if(currentUser != null)
-        {
-            SharedPreferences.Editor editor = write.edit();
-            editor.putBoolean("splash_appear",true);
-            splash_appear = write.getBoolean("splash_appear",true);
-            editor.commit();
-        }
-
-
-
-        if(splash_appear == false)
-        {
-        }
-        else
-        {
-            Intent m = new Intent(getApplicationContext(),SignIn.class);
-            startActivity(m);
-            finish();
-        }*/
 
 
 

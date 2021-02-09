@@ -27,12 +27,25 @@ public class Trips implements Serializable {
     private String time;
     private String date;
     private String notes;
-   
+
+
     @Ignore
     public Trips(){}
 
-    
-    public Trips(String name, String startPoint, String endPoint, int status, int type, String time, String date,String notes) {
+
+    public Trips(int id, String name, String startPoint, String endPoint, int status, int type, String time, String date, String notes) {
+        Id = id;
+        this.name = name;
+        this.startPoint = startPoint;
+        this.endPoint = endPoint;
+        this.status = status;
+        this.type = type;
+        this.time = time;
+        this.date = date;
+        this.notes = notes;
+    }
+
+    public Trips(String name, String startPoint, String endPoint, int status, int type, String time, String date, String notes) {
         this.name = name;
         this.startPoint = startPoint;
         this.endPoint = endPoint;

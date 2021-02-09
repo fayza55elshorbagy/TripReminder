@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/background"
     >
 
 
@@ -15,25 +16,54 @@
             android:id="@+id/addBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#47A1DE"
+            android:backgroundTint="@color/purbleApp"
             app:borderWidth="0dp"
             android:clickable="true"
             app:fabSize="normal"
             android:src="@drawable/ic_add"
-            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_margin="20dp"
             ></com.google.android.material.floatingactionbutton.FloatingActionButton>
 
-        <androidx.appcompat.widget.Toolbar
+        <!--androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#2A6FEA"
+            android:background="@color/purbleApp"
             android:id="@+id/toolbar"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             android:elevation="4dp"
-            ></androidx.appcompat.widget.Toolbar>
+            ></androidx.appcompat.widget.Toolbar-->
+        <ImageView
+            android:id="@+id/menu"
+            android:layout_width="40dp"
+            android:layout_height="55dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/menu" />
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="UpComing"
+            android:textColor="@color/white"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            android:layout_margin="20dp"
+            android:layout_alignRight="@+id/title1" />
+        <TextView
+            android:id="@+id/title1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trips"
+            android:textColor="@color/yellowApp"
+            android:textSize="25dp"
+            android:layout_margin="20dp"
+            android:textStyle="bold"
+            android:padding="10dp"
+            android:layout_alignTop="@+id/title"
+            android:layout_alignParentEnd="true" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentContainer"
@@ -48,8 +78,6 @@
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="100dp"
             android:visibility="invisible" />
-
-
     </RelativeLayout>
 
 </LinearLayout>
