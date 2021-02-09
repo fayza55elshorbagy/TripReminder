@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     tools:openDrawer="start"
     tools:context=".MainActivity">
+
     <include android:layout_width="match_parent"
         android:layout_height="wrap_content"
         layout="@layout/fragment_container"/>
@@ -18,7 +19,9 @@
         app:itemIconTint="@drawable/nav_icon"
         app:itemTextColor="@drawable/nav_icon"
         app:headerLayout="@layout/header"
-        app:menu="@menu/menu_item"></com.google.android.material.navigation.NavigationView>
+        app:menu="@menu/menu_item">
+
+    </com.google.android.material.navigation.NavigationView>
 
    <!-- <LinearLayout
         android:layout_width="match_parent"
@@ -27,14 +30,29 @@
         android:layout_marginTop="15dp"
         >
 
-    <ImageView
-        android:id="@+id/menu"
-        android:layout_width="40dp"
-        android:layout_height="55dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/menu_icon" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/menu"
+                android:layout_width="40dp"
+                android:layout_height="55dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/menu_icon" />
+
+            <Button
+                android:layout_width="186dp"
+                android:layout_height="70dp"
+                android:layout_marginLeft="100dp"
+                android:text="Start"
+                android:onClick="openGoogleMap"/>
+        </LinearLayout>
+
     </LinearLayout>
 -->
+
 
 </androidx.drawerlayout.widget.DrawerLayout>

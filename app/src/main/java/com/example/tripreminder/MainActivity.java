@@ -2,9 +2,11 @@ package com.example.tripreminder;
 
 import androidx.annotation.NonNull;
 
-import androidx.appcompat.app.ActionBarDrawerToggle;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -12,29 +14,46 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
+import android.Manifest;
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.provider.Settings;
+import android.content.ComponentName;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.tripreminder.beans.Trips;
 import com.example.tripreminder.fragments.History;
 import com.example.tripreminder.fragments.Upcoming;
-import com.example.tripreminder.roomDB.TripsViewModel;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
+import com.example.tripreminder.beans.Trips;
+import com.example.tripreminder.roomDB.TripsViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -47,13 +66,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import static com.example.tripreminder.DialogActivity.notificationIntentKey;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    EditText name;
-    DatabaseReference databaseReference;
-    FirebaseAuth firebaseAuth;
+    public static Dialog dialog;
     NavigationView navigationView;
     ImageView imageView;
     DrawerLayout drawerLayout;
+    public static Activity mactivity;
+
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
     TripsViewModel viewModel;
@@ -61,16 +82,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     FirebaseUser currentUser;
     Toolbar toolBar;
     FloatingActionButton addBtn;
+    public static ProgressBar progressBar_up;
 
+    FirebaseAuth firebaseAuth;
+    int PREMISSION_ID = 100;
+    FusedLocationProviderClient fusedLocationProviderClient;
+    public static double latitude = 0.0;
+    public static double longitude = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             setShowWhenLocked(true);
             setTurnScreenOn(true);
         }
+
+        progressBar_up = findViewById(R.id.progressBar_up);
+        Log.i("click","Main");
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        getlocation();
+        mactivity = MainActivity.this;
+
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+
+        //imageView = (ImageView) findViewById(R.id.menu);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if(!Settings.canDrawOverlays(this)) {
                 checkDrawOverAppsPermissionsDialog();
@@ -119,16 +159,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.bringToFront();
         navigationView.setNavigationItemSelectedListener(this);
 
+
     }
+
 
     @Override
     public void onBackPressed() {
-        if(drawerLayout.isDrawerOpen(GravityCompat.START))
-        {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
-        }
-        else
-        {
+        } else {
             super.onBackPressed();
         }
     }
@@ -139,15 +178,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if(id ==R.id.logout)
         {
+            viewModel.deleteAllTrips();
             FirebaseAuth.getInstance().signOut();
-            startActivity(new Intent(getApplicationContext(),SignIn.class));
+            startActivity(new Intent(getApplicationContext(), SignIn.class));
             finish();
+
         }
+
         if(id == R.id.upComing)
         {
             //toolBar.setTitle("UpComing Trips");
             getSupportFragmentManager().beginTransaction().replace(
-            R.id.fragmentContainer, new Upcoming(), "UpcomingFragment").commit();
+                    R.id.fragmentContainer, new Upcoming(), "UpcomingFragment").commit();
         }
         if(id == R.id.history)
         {
@@ -167,6 +209,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
     }
 
     private void errorWarningForNotGivingDrawOverAppsPermissions(){
@@ -239,4 +286,111 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else
             Toast.makeText(MainActivity.this, "" + "Error" , Toast.LENGTH_SHORT).show();
     }
+
+    public void getlocation() {
+        getLastLocation();
+    }
+    private void getLastLocation() {
+        //check premission in runtime
+        if (checkPremissions()) {
+            if (isLocationEnabled()) {
+
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Location> task) {
+                        Location location = task.getResult();
+                        if (location == null)
+                            requstNewLocationData();
+                        else
+                        {
+                            latitude = location.getLatitude();
+                            longitude = location.getLongitude();
+                            Toast.makeText(MainActivity.this,  latitude+ "," + longitude, Toast.LENGTH_LONG).show();
+
+                        }
+
+                    }
+                });
+            } else {
+                Toast.makeText(this, "Turn on location", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+
+            }
+        } else {
+            requestPremission();
+        }
+    }
+
+    private void requestPremission() {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, PREMISSION_ID);
+    }
+    private void requstNewLocationData() {
+        LocationRequest locationRequest = new LocationRequest();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(0);
+        locationRequest.setNumUpdates(1);
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
+    }
+    private LocationCallback locationCallback = new LocationCallback()
+    {
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            super.onLocationResult(locationResult);
+            Location lastLocation = locationResult.getLastLocation();
+            latitude = lastLocation.getLatitude();
+            longitude = lastLocation.getLongitude();
+            Log.i("click",latitude+"insideCallBack"+longitude);
+
+            Toast.makeText(MainActivity.this, latitude+", "+longitude, Toast.LENGTH_LONG).show();
+        }
+    };
+
+
+    private boolean isLocationEnabled() {
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    }
+
+    private boolean checkPremissions() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+        return false;
+    }
+
+    //user say yes to premission
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == PREMISSION_ID)
+        {
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                getLastLocation();
+        }
+    }
+
 }

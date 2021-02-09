@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tripreminder.R;
 
+
 import com.example.tripreminder.beans.HistoryListener;
 import com.example.tripreminder.beans.TripListener;
 import com.example.tripreminder.beans.Trips;
@@ -28,13 +29,11 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     public HistoryAdapter(HistoryListener tripListener) {
         this.tripListener = tripListener;
-
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.history_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
@@ -42,11 +41,10 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
         Trips trip = trips.get(position);
         holder.title.setText(trip.getName());
-        holder.from.setText(trip.getStartPoint());
-        holder.to.setText(trip.getEndPoint());
+        holder.from.setText(trip.getStartLoc());
+        holder.to.setText(trip.getEndLoc());
         holder.date.setText(trip.getDate());
         holder.time.setText(trip.getTime());
         //holder.type.setText(trip.getType());
@@ -57,15 +55,11 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
         holder.del.setOnClickListener(v -> tripListener.delete(trips.get(position)));
         holder.note.setOnClickListener(v -> tripListener.showNote(trips.get(position)));
-
-
-
     }
     public void saveTrips(List<Trips> trips) {
         this.trips = trips;
         notifyDataSetChanged();
     }
-
     @Override
     public int getItemCount() {
         return trips.size();
@@ -91,6 +85,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             to = itemView.findViewById(R.id.toView);
             date = itemView.findViewById(R.id.dateView);
             time = itemView.findViewById(R.id.timeView);
+
 
             status = itemView.findViewById(R.id.statusView);
             note = itemView.findViewById(R.id.note);
