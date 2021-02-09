@@ -100,12 +100,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            setShowWhenLocked(true);
+            setTurnScreenOn(true);
+        }
+
         menu = findViewById(R.id.nav_view);
         header = menu.getHeaderView(0);
         email = header.findViewById(R.id.name);
         SharedPreferences writr = getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
         String n = writr.getString("Email","m");
         email.setText(n);
+
         progressBar_up = findViewById(R.id.progressBar_up);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getlocation();
@@ -115,6 +123,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+
+
+        //imageView = (ImageView) findViewById(R.id.menu);
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if(!Settings.canDrawOverlays(this)) {
@@ -214,7 +226,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         if(id == R.id.map)
         {
-
+            Intent mapIntent = new Intent(MainActivity.this,MapActivity.class);
+            startActivity(mapIntent);
+            finish();
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

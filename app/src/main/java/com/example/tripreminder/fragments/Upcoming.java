@@ -52,7 +52,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+
 import com.example.tripreminder.DialogActivity;
+
 import com.example.tripreminder.NotificationReceiver;
 import com.example.tripreminder.R;
 import com.example.tripreminder.adapters.UpcomingTripAdapter;
@@ -76,6 +78,8 @@ import java.util.List;
 import static com.example.tripreminder.DialogActivity.notificationIntentKey;
 import static android.app.Activity.RESULT_OK;
 import static java.lang.Double.parseDouble;
+
+import static com.example.tripreminder.DialogActivity.notificationIntentKey;
 
 public class Upcoming extends Fragment {
 
@@ -125,6 +129,15 @@ public class Upcoming extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Toast.makeText(getContext(), "elsize "+adapter.getTrips().size(), Toast.LENGTH_SHORT).show();
+        for (int i=0;i<adapter.getTrips().size();i++){
+            Log.e("Upcoming",adapter.getTrips().get(i).getDate()+"#@#@"+adapter.getTrips().get(i).getTime());
+        }
+
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -164,6 +177,7 @@ public class Upcoming extends Fragment {
 
             @Override
             public void startNav(Trips trip) {
+
                    endLatitude = parseDouble(trip.getEndLat());
                    endLongitude = parseDouble(trip.getEndLng());
                    trip.setStatus(2);
@@ -183,11 +197,13 @@ public class Upcoming extends Fragment {
                    th.start();
                    startGoogleActivityFromFragment();
 
+
             }
 
             @Override
             public void cancel(Trips trip) {
                 trip.setStatus(1);
+                cancelAlarm(7);
                 viewModel.update(trip);
                cancelAlarm(trip.getId());
 
@@ -319,6 +335,7 @@ public class Upcoming extends Fragment {
 
         return myQuittingDialogBox;
     }
+
     private void cancelAlarm(int requestCode) {
         AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         Intent broadcastIntent= new Intent(getContext(),NotificationReceiver.class);
@@ -328,11 +345,13 @@ public class Upcoming extends Fragment {
         alarmManager.cancel(pendingBroadcastIntent);
         pendingBroadcastIntent.cancel();
 
+
     }
 
 
 
    }
+
 
 
 

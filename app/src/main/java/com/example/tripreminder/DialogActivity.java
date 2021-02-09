@@ -18,6 +18,7 @@ import android.os.Message;
 
 import android.provider.Settings;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -51,6 +52,8 @@ public class DialogActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dialog);
         notificationManagerCompat= NotificationManagerCompat.from(this);
+
+
         Log.e("NOTWORKING", "dialog activity");
          Intent intent= getIntent();
         long TrripId=  intent.getLongExtra("mid",-1);
@@ -225,6 +228,6 @@ public class DialogActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        stopService(new Intent(this,bubbleService.class));
+        //stopService(new Intent(this,bubbleService.class));
     }
 }
