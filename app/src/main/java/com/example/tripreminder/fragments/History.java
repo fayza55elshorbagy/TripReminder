@@ -101,7 +101,7 @@ public class History extends Fragment {
                 }
                 adapter.saveTrips(upcomingTrips);
                 Log.i("note","ol  "+trips.toString());
-                Toast.makeText(getContext(), "Added Successfully", Toast.LENGTH_LONG).show();
+               // Toast.makeText(getContext(), "Added Successfully", Toast.LENGTH_LONG).show();
             }
         });
 

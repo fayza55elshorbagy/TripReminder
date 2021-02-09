@@ -106,14 +106,6 @@ public class Upcoming extends Fragment {
         adapter=new UpcomingTripAdapter(menuItemListener);
         recyclerView.setAdapter(adapter);
 
-        addBtn=view.findViewById(R.id.addBtn);
-        addBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(getContext(), addTripActivity.class);
-                startActivity(intent);
-            }
-        });
 
         viewModel= ViewModelProviders.of(this).get(TripsViewModel.class);
         viewModel.getAllTrips().observe(getViewLifecycleOwner(), new Observer<List<Trips>>() {
@@ -127,7 +119,7 @@ public class Upcoming extends Fragment {
                 }
                 adapter.saveTrips(upcomingTrips);
                 Log.i("note","ol  "+trips.toString());
-                Toast.makeText(getContext(), "Added Successfully", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getContext(), "Added Successfully", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -156,7 +148,7 @@ public class Upcoming extends Fragment {
                 intent.putExtra(addTripActivity.TRIP_OBJ, trip);
                 intent.putExtra(addTripActivity.TRIP_ID,trip.getId());
                 startActivity(intent);
-                Toast.makeText(getContext(), "you clicked on edit", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getContext(), "you clicked on edit", Toast.LENGTH_SHORT).show();
                 cancelAlarm(trip.getId());
 
             }
@@ -172,25 +164,25 @@ public class Upcoming extends Fragment {
 
             @Override
             public void startNav(Trips trip) {
-               endLatitude = parseDouble(trip.getEndLat());
-               endLongitude =parseDouble(trip.getEndLng());
-                trip.setStatus(2);
-                viewModel.update(trip);
-                Thread th = new Thread()
-                {
-                    @Override
-                    public void run() {
-                        super.run();
-                        try {
-                            sleep(500);
-                            checkBubblePermission(trip);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                };
-                th.start();
-                startGoogleActivityFromFragment();
+                   endLatitude = parseDouble(trip.getEndLat());
+                   endLongitude = parseDouble(trip.getEndLng());
+                   trip.setStatus(2);
+                   viewModel.update(trip);
+                   Thread th = new Thread() {
+                       @Override
+                       public void run() {
+                           super.run();
+                           try {
+                               sleep(500);
+                               checkBubblePermission(trip);
+                           } catch (InterruptedException e) {
+                               e.printStackTrace();
+                           }
+                       }
+                   };
+                   th.start();
+                   startGoogleActivityFromFragment();
+
             }
 
             @Override
@@ -276,7 +268,7 @@ public class Upcoming extends Fragment {
         addNoteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addNoteBtn.setVisibility(View.INVISIBLE);
+                addNoteBtn.setVisibility(View.GONE);
                 notetxt.setVisibility(View.VISIBLE);
                 saveNoteBtn.setVisibility(View.VISIBLE);
             }
@@ -289,9 +281,9 @@ public class Upcoming extends Fragment {
                    noteList.add(notetxt.getText().toString());
                 Log.i("note","nossssss"+noteList);
                 adapterRe.notifyDataSetChanged();
-                notetxt.setVisibility(View.INVISIBLE);
+                notetxt.setVisibility(View.GONE);
                 notetxt.setText("");
-                saveNoteBtn.setVisibility(View.INVISIBLE);
+                saveNoteBtn.setVisibility(View.GONE);
                 addNoteBtn.setVisibility(View.VISIBLE);
 
             }
@@ -337,16 +329,12 @@ public class Upcoming extends Fragment {
         pendingBroadcastIntent.cancel();
 
     }
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        //getActivity().stopService(new Intent(getActivity(),bubbleService.class));
-
-    }
 
 
 
    }
+
+
 
 
 

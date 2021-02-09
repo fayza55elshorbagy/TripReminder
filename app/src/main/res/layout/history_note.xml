@@ -2,10 +2,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="400dp"
     app:cardCornerRadius="20dp"
     android:background="#F3F2F7"
-    app:cardElevation="4dp"
+    app:cardElevation="10dp"
     app:cardUseCompatPadding="true"
     android:padding="5dp">
     <LinearLayout
@@ -25,6 +25,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/note"
                 android:text="Notes:"
+                android:textColor="@color/purbleApp"
                 android:textSize="30sp"
                 android:textStyle="bold" />
 
@@ -32,8 +33,9 @@
                 android:id="@+id/img_cancel"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:layout_marginTop="5dp"
                 android:layout_alignParentEnd="true"
-                android:padding="8dp"
+                android:padding="5dp"
                 android:src="@drawable/ic_baseline_cancel_24"
                 app:backgroundTint="@color/icon_color" />
         </RelativeLayout>

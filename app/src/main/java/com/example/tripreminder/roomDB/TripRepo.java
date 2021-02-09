@@ -56,6 +56,9 @@ public class TripRepo {
         public List<Trips> getAll()throws ExecutionException, InterruptedException { return new GetAllsAsyncTask(mTripDao).execute().get(); }
        //get trip by id
         public Trips getTripById(long id)throws ExecutionException, InterruptedException { return new GetByIdsAsyncTask(mTripDao).execute(id).get(); }
+        // get done trips
+        //get All
+        public List<Trips> getDoneTrips()throws ExecutionException, InterruptedException { return new GetDoneTripssAsyncTask(mTripDao).execute().get(); }
 
     /* private static class InsertAsyncTask extends AsyncTask<Trips, Void, Void> {
     private TripDAo minfoDao;
@@ -142,6 +145,18 @@ public class TripRepo {
         protected Void doInBackground(List<Trips>... lists) {
             mAsyncTaskDao.insertAll(lists[0]);
             return null;
+        }
+    }
+    private class GetDoneTripssAsyncTask extends AsyncTask<Void, Void,List<Trips>> {
+        private TripDAo mAsyncTaskDao;
+
+        GetDoneTripssAsyncTask(TripDAo dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected List<Trips> doInBackground(Void... voids) {
+            return mAsyncTaskDao.getDoneTrips();
         }
     }
 

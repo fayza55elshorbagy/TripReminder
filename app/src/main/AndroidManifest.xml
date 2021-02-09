@@ -19,6 +19,7 @@
         android:theme="@style/Theme.TripReminder">
         <activity android:name=".WelcomeScreen"></activity>
 
+
         <service
             android:name=".bubbleService"
             android:enabled="true"
@@ -26,11 +27,18 @@
 
         <activity android:name=".SignIn" />
         <activity android:name=".SignUp" />
-        <activity android:name=".MainActivity" />
-        <activity
-            android:name=".DialogActivity"
+
+        <activity android:name=".headeractivity" />
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+
+        <activity android:name=".DialogActivity"
             android:theme="@style/Theme.AppCompat.Transparent.NoActionBar" />
-        <activity android:name=".addTripActivity" />
+        <activity android:name=".addTripActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+
         <activity android:name=".SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

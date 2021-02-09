@@ -21,24 +21,29 @@ public class ReadData implements Runnable {
     public void run() {
         DatabaseReference mDatabase;
         ArrayList<Trips> returnedData = new ArrayList<>();
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid() ;
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Trips user;
-                Message Msg = Message.obtain();
-                DataSnapshot d= snapshot.child("Trips").child("0");
-                for (DataSnapshot ds : d.getChildren()){
-                     user = ds.getValue(Trips.class);
-                    returnedData.add(user);
+        ///nul object reference
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("Trips").child("0");
+            mDatabase.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Message Msg = Message.obtain();
+                    for (DataSnapshot ds : snapshot.getChildren()) {
+                        Trips user = ds.getValue(Trips.class);
+                        //System.out.println(user.getEndPoint());
+                        returnedData.add(user);
+                    }
+                    System.out.println("the result inside thread :  " + returnedData.size() + "");
+                    Msg.obj = returnedData;
+                    SignIn.fireBaseReadHandler.sendMessage(Msg);
                 }
-                Msg.obj = returnedData;
-                SignIn.fireBaseReadHandler.sendMessage(Msg);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
-        });
 
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+        }
+		
     }
 }

@@ -73,7 +73,8 @@ public class SignIn extends AppCompatActivity {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-
+                   // startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                    finish();
                     // System.out.println("the first note of first element :  " + TotalUserData.get(1).getNotes().get(2) + "");
                 }
             }
@@ -93,7 +94,7 @@ public class SignIn extends AppCompatActivity {
         firebaseUser = firebaseAuth.getCurrentUser();
         if(firebaseUser != null)
         {
-            Log.i("click","userExist G&m ");
+
             startActivity(new Intent(getApplicationContext(),MainActivity.class));
             finish();
         }
@@ -131,20 +132,26 @@ public class SignIn extends AppCompatActivity {
                         try {
                             sleep(1000);
                             readFireBaseThread.start();
-
                             //remove Activity
-                           // finish();
+                           //finish();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
                 };
                 s.start();
-                Log.i("click","Result not ok ");
-                startActivity(new Intent(getApplicationContext(),MainActivity.class));
-                //MainActivity.progressBar_up.setVisibility(View.VISIBLE);
-                finish();
 
+                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                if(firebaseUser != null)
+                {
+
+                    Toast.makeText(SignIn.this, "nulll.", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                    finish();
+                }
+               finish();
+                Toast.makeText(SignIn.this, "nott nulll.", Toast.LENGTH_SHORT).show();
+                //MainActivity.progressBar_up.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -160,14 +167,12 @@ public class SignIn extends AppCompatActivity {
         List<Trips> trips = viewModel.getAll();
         for (Trips t : trips) {
             if (t.getStatus() == 0) {
-                Log.i("ola","logjj"+t);
                 cancelAlarm(t.getId());
 
             }
 
         }
     }
-
     private void cancelAlarm(int requestCode) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent broadcastIntent= new Intent(SignIn.this,NotificationReceiver.class);
