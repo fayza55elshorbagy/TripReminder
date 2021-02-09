@@ -41,4 +41,4 @@ public class TripsViewModel extends AndroidViewModel {
     }
     public List<Trips> getAll() throws ExecutionException, InterruptedException { return mRepository.getAll(); }
     public Trips getTripById(long id) throws ExecutionException, InterruptedException { return mRepository.getTripById(id); }
-}}
+}

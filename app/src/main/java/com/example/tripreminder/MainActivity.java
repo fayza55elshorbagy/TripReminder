@@ -26,6 +26,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -40,6 +41,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tripreminder.fragments.History;
@@ -89,13 +91,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     FusedLocationProviderClient fusedLocationProviderClient;
     public static double latitude = 0.0;
     public static double longitude = 0.0;
+    NavigationView menu;
+    View header;
+    TextView email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        menu = findViewById(R.id.nav_view);
+        header = menu.getHeaderView(0);
+        email = header.findViewById(R.id.nameUser);
+        SharedPreferences writr = getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
+        String n = writr.getString("Email","m");
+        email.setText(n);
         progressBar_up = findViewById(R.id.progressBar_up);
-        Log.i("click","Main");
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getlocation();
         mactivity = MainActivity.this;

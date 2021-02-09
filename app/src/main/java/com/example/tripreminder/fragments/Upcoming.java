@@ -90,7 +90,6 @@ public class Upcoming extends Fragment {
     private int MY_PERMISSION = 100;
     double endLatitude;
     double endLongitude;
-
     public Upcoming() {
         // Required empty public constructor
     }
@@ -175,6 +174,8 @@ public class Upcoming extends Fragment {
             public void startNav(Trips trip) {
                endLatitude = parseDouble(trip.getEndLat());
                endLongitude =parseDouble(trip.getEndLng());
+                trip.setStatus(2);
+                viewModel.update(trip);
                 Thread th = new Thread()
                 {
                     @Override
@@ -336,13 +337,17 @@ public class Upcoming extends Fragment {
         pendingBroadcastIntent.cancel();
 
     }
-   }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getActivity().stopService(new Intent(getActivity(),bubbleService.class));
+        //getActivity().stopService(new Intent(getActivity(),bubbleService.class));
 
     }
-}
+
+
+
+   }
+
+
+
 

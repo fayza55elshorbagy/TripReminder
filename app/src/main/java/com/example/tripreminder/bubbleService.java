@@ -93,6 +93,7 @@ public class bubbleService extends Service {
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         windowManager.addView(bubbleLayout,params);
         ImageView img = bubbleLayout.findViewById(R.id.bubble_img);
+        ImageView canncel = bubbleLayout.findViewById(R.id.bubble_cancel);
         img.setOnTouchListener(new View.OnTouchListener() {
             private  int initialX;
             private  int initialY;
@@ -144,6 +145,13 @@ public class bubbleService extends Service {
                 return false;
             }
         });
+        canncel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                stopSelf();
+                bubbleLayout.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
    public void showDialog(){
@@ -185,7 +193,7 @@ public class bubbleService extends Service {
     public void onDestroy() {
         super.onDestroy();
         //windowManager.removeView(bubbleLayout);
-        bubbleLayout.setVisibility(View.INVISIBLE);
+       // bubbleLayout.setVisibility(View.INVISIBLE);
     }
 
     public String[] ArrayListTOArray (ArrayList<String> arr){

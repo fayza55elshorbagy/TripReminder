@@ -6,7 +6,8 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
-
+    <color name="appColor">#55418E</color>
+    <color name="appyelow">#FFA500</color>
     <color name="textColor">#3B5998</color>
     <color name="status_bar">#97999C</color>
     <color name="colorPrimary">#008577</color>
