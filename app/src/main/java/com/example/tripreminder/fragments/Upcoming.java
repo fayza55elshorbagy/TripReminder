@@ -132,7 +132,7 @@ public class Upcoming extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Toast.makeText(getContext(), "elsize "+adapter.getTrips().size(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), "elsize "+adapter.getTrips().size(), Toast.LENGTH_SHORT).show();
         for (int i=0;i<adapter.getTrips().size();i++){
             Log.e("Upcoming",adapter.getTrips().get(i).getDate()+"#@#@"+adapter.getTrips().get(i).getTime());
         }

@@ -69,6 +69,8 @@ dependencies {
 
     implementation 'com.google.maps:google-maps-services:0.16.1'
     implementation 'org.slf4j:slf4j-simple:1.7.25'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+
 
     //bubble
     implementation 'com.txusballesteros:bubbles:1.2.1'
