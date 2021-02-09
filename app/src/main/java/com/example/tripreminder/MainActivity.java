@@ -226,7 +226,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         if(id == R.id.map)
         {
-
+            Intent mapIntent = new Intent(MainActivity.this,MapActivity.class);
+            startActivity(mapIntent);
+            finish();
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
