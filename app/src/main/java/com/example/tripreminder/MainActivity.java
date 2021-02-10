@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DatabaseReference rootRef;
     FirebaseUser currentUser;
     FloatingActionButton addBtn;
-    public static ProgressBar progressBar_up;
+    public static ProgressBar progressBar;
     TextView title;
     TextView title1;
     FirebaseAuth firebaseAuth;
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String n = writr.getString("Email","m");
         email.setText(n);
 
-        progressBar_up = findViewById(R.id.progressBar_up);
+        progressBar = findViewById(R.id.progressBar);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getlocation();
         mactivity = MainActivity.this;
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         viewModel= ViewModelProviders.of(this).get(TripsViewModel.class);
         navigationView = (NavigationView)findViewById(R.id.nav_view);
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer);
-
+        progressBar.setVisibility(View.VISIBLE);
 
 
         addBtn = (FloatingActionButton)findViewById(R.id.addBtn);
