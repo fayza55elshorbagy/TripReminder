@@ -137,7 +137,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             PolylineOptions opts = new PolylineOptions().addAll(path).color(randomColor).width(5);
             map.addPolyline(opts);
         }
-
+        
         map.getUiSettings().setZoomControlsEnabled(true);
         LatLng latLng = new LatLng( 24.09082,34.89005);
         Location l = new Location("L");

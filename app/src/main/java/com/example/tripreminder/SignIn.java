@@ -174,7 +174,7 @@ public class SignIn extends AppCompatActivity {
         broadcastIntent.putExtra("id",id);
         PendingIntent pendingBroadcastIntent=PendingIntent.getBroadcast(SignIn.this, (int) id,
                 broadcastIntent,0);
-        Log.i("ola"," "+calendar.getTimeInMillis()+" "+id);
+        Log.e("alarm"," "+calendar.getTimeInMillis()+" "+id);
         alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingBroadcastIntent);
 
 
@@ -182,13 +182,21 @@ public class SignIn extends AppCompatActivity {
     private void setAllAlarm(){
         for(Trips t:upcomingList){
            // Log.i("ola","kk"+t.getCalender().get(Calendar.HOUR_OF_DAY)+" ff "+ t.getCalender().get(Calendar.MINUTE)+"   "+t.getCalender().get(Calendar.DAY_OF_MONTH)+"  "+t.getCalender().get(Calendar.YEAR)+"  "+t.getCalender().get(Calendar.MONTH)+"id"+t.getId());
-            if(calenderValidation(t.getCalender())){
-                 setAlarm(t.getCalender(),t.getId());
-                 Log.i("ola","if"+t.getCalender().get(Calendar.HOUR_OF_DAY));
+            //
+            Calendar cal=t.getCalender();
+            cal.set(Calendar.YEAR,t.getCalender().get(Calendar.YEAR));
+            cal.set(Calendar.MONTH,(t.getCalender().get(Calendar.MONTH)-1));
+            cal.set(Calendar.DAY_OF_MONTH,t.getCalender().get(Calendar.DAY_OF_MONTH));
+            cal.set(Calendar.HOUR_OF_DAY,t.getCalender().get(Calendar.HOUR_OF_DAY));
+            cal.set(Calendar.MINUTE,t.getCalender().get(Calendar.MINUTE));
+            if(calenderValidation(cal)){
+                 setAlarm(cal,t.getId());
+            Log.e("alarm","if"+cal.get(Calendar.MONTH));
+                 Log.e("alarm","if"+t.getCalender().get(Calendar.HOUR_OF_DAY));
             }
-            else
-                Log.i("ola","else"+t.getCalender().get(Calendar.HOUR_OF_DAY));
-
+            else {
+                Log.e("alarm", "else" + t.getCalender().get(Calendar.HOUR_OF_DAY));
+            }
 
         }
     }
@@ -200,11 +208,16 @@ public class SignIn extends AppCompatActivity {
         currentCalendar.set(Calendar.HOUR_OF_DAY,currentCalendar.get(Calendar.HOUR_OF_DAY));
         currentCalendar.set(Calendar.MINUTE,currentCalendar.get(Calendar.MINUTE));
         currentCalendar.set(Calendar.SECOND,0);
-        Log.i("ola","valid"+currentCalendar.get(Calendar.HOUR_OF_DAY)+"calendar"+calendar.get(Calendar.HOUR_OF_DAY));
+        Log.e("alarm","validation: "+"current"+currentCalendar.get(Calendar.HOUR_OF_DAY)+"calendar"+calendar.get(Calendar.HOUR_OF_DAY));
         if((calendar.getTimeInMillis()-currentCalendar.getTimeInMillis())<=0){
+            Log.e("alarm","invalid: "+"current"+currentCalendar.get(Calendar.HOUR_OF_DAY)+"calendar"+calendar.get(Calendar.HOUR_OF_DAY));
+            Log.e("alarm","invalid: "+"current"+currentCalendar.get(Calendar.DAY_OF_MONTH)+"   "+currentCalendar.get(Calendar.MONTH));
             return false;
+
         }
         else {
+            Log.e("alarm","valid"+currentCalendar.get(Calendar.HOUR_OF_DAY)+"calendar"+calendar.get(Calendar.HOUR_OF_DAY));
+            Log.e("alarm","valid: "+"current"+currentCalendar.get(Calendar.DAY_OF_MONTH)+"   "+currentCalendar.get(Calendar.MONTH));
             return true;
         }
     }
