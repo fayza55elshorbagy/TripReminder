@@ -40,13 +40,13 @@ public class WelcomeScreen extends AppCompatActivity {
 
         if(flag == 1)
         {
-            Toast.makeText(this, "firstTime", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "firstTime", Toast.LENGTH_SHORT).show();
             editor.putInt("flag",++flag);
             flag = 2;
         }
         if(flag == 2)
         {
-            Toast.makeText(this, "secondTime", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(this, "secondTime", Toast.LENGTH_SHORT).show();
             Intent m = new Intent(getApplicationContext(),SignUp.class);
             startActivity(m);
             finish();

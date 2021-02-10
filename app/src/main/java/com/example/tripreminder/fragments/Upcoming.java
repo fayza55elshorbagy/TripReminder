@@ -117,9 +117,13 @@ public class Upcoming extends Fragment {
             public void onChanged(List<Trips> trips) {
                 List<Trips> upcomingTrips=new ArrayList<>();
                 for (Trips t:trips) {
-                    if(t.getStatus()==0)
+                    if(t.getStatus()==0) {
                         upcomingTrips.add(t);
-                    //Log.i("ola","up"+t.getEndLat()+"  "+t.getEndLng());
+                        Log.i("ola", "up" + t);
+                    }
+                    else{
+                        Log.i("ola", "his" + t);
+                    }
                 }
                 adapter.saveTrips(upcomingTrips);
                 Log.i("note","ol  "+trips.toString());

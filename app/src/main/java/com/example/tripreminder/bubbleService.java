@@ -104,7 +104,7 @@ public class bubbleService extends Service {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (gestureDetector.onTouchEvent(motionEvent)) {
-                    Toast.makeText(bubbleService.this, "ddddddddddialog", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(bubbleService.this, "ddddddddddialog", Toast.LENGTH_SHORT).show();
                     showDialog();
                     return true;
                 } else {

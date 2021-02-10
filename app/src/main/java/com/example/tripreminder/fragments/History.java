@@ -94,12 +94,12 @@ public class History extends Fragment {
         viewModel.getAllTrips().observe(getViewLifecycleOwner(), new Observer<List<Trips>>() {
             @Override
             public void onChanged(List<Trips> trips) {
-                List<Trips> upcomingTrips=new ArrayList<>();
+                List<Trips> hisyoryTrips=new ArrayList<>();
                 for (Trips t:trips) {
-                    if(t.getStatus()==1||t.getStatus()==2)
-                        upcomingTrips.add(t);
+                    if(t.getStatus()==1||t.getStatus()==2||t.getStatus()==3)
+                        hisyoryTrips.add(t);
                 }
-                adapter.saveTrips(upcomingTrips);
+                adapter.saveTrips(hisyoryTrips);
                 Log.i("note","ol  "+trips.toString());
                // Toast.makeText(getContext(), "Added Successfully", Toast.LENGTH_LONG).show();
             }

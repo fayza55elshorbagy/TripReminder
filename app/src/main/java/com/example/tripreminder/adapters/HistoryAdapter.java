@@ -52,6 +52,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             holder.status.setText("Cancelled" );
         else if(trip.getStatus()==2)
             holder.status.setText("Done" );
+        else if(trip.getStatus()==3)
+            holder.status.setText("Passed" );
 
         holder.del.setOnClickListener(v -> tripListener.delete(trips.get(position)));
         holder.note.setOnClickListener(v -> tripListener.showNote(trips.get(position)));
