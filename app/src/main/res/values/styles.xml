@@ -29,6 +29,5 @@
         <item name="colorControlActivated">@color/white</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:windowBackground">@drawable/login</item>
     </style>
 </resources>
