@@ -45,9 +45,11 @@ public class SignIn extends AppCompatActivity {
     private TripsViewModel viewModel;
     FirebaseUser firebaseUser;
     List<Trips> upcomingList;
+    public static boolean flag = false;
     @Override
     protected void onStart() {
         super.onStart();
+
     }
 
     @Override
@@ -148,7 +150,7 @@ public class SignIn extends AppCompatActivity {
                 FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                 if(firebaseUser != null)
                 {
-
+                    flag = true;
                     startActivity(new Intent(getApplicationContext(),MainActivity.class));
                     finish();
                 }

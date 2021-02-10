@@ -2,9 +2,11 @@ package com.example.tripreminder.firebase;
 
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 
+import com.example.tripreminder.MainActivity;
 import com.example.tripreminder.SignIn;
 import com.example.tripreminder.beans.Trips;
 import com.google.firebase.auth.FirebaseAuth;

@@ -143,10 +143,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         viewModel= ViewModelProviders.of(this).get(TripsViewModel.class);
         navigationView = (NavigationView)findViewById(R.id.nav_view);
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer);
-        progressBar.setVisibility(View.VISIBLE);
-
 
         addBtn = (FloatingActionButton)findViewById(R.id.addBtn);
+        if(SignIn.flag == true)
+        {
+            progressBar.setVisibility(View.VISIBLE);
+            SignIn.flag = false;
+        }
+
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
