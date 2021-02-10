@@ -149,7 +149,6 @@ public class SignIn extends AppCompatActivity {
                 if(firebaseUser != null)
                 {
 
-                   // Toast.makeText(SignIn.this, "nulll.", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(getApplicationContext(),MainActivity.class));
                     finish();
                 }
@@ -191,11 +190,12 @@ public class SignIn extends AppCompatActivity {
             cal.set(Calendar.MINUTE,t.getCalender().get(Calendar.MINUTE));
             if(calenderValidation(cal)){
                  setAlarm(cal,t.getId());
-            Log.e("alarm","if"+cal.get(Calendar.MONTH));
                  Log.e("alarm","if"+t.getCalender().get(Calendar.HOUR_OF_DAY));
             }
             else {
-                Log.e("alarm", "else" + t.getCalender().get(Calendar.HOUR_OF_DAY));
+                t.setStatus(3);
+                viewModel.update(t);
+                Log.e("alarm", "else" + t);
             }
 
         }

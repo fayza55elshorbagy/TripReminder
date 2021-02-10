@@ -194,8 +194,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if(id ==R.id.logout)
         {
-        AlertDialog diaBox = AskOption();
-            diaBox.show();
+       // AlertDialog diaBox = AskOption();
+           // diaBox.show();
+            try {
+                cancelAllAlarm();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            viewModel.deleteAllTrips();
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(getApplicationContext(), SignIn.class));
+            finish();
 
 
         }

@@ -209,7 +209,7 @@ public class Trips implements Serializable {
     public Calendar getCalender(){
         String [] mdate=date.split("-");
         String [] mtime=time.split(":");
-        Log.i("ola","ttttime:"+time+"  "+ mtime[0]);
+        //Log.i("ola","ttttime:"+time+"  "+ mtime[0]);
         Calendar myCalendar = Calendar.getInstance();
         myCalendar.set(Calendar.YEAR, Integer.parseInt(mdate[2]));
         myCalendar.set(Calendar.MONTH, Integer.parseInt(mdate[1]));

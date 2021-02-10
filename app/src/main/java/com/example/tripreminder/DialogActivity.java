@@ -117,7 +117,7 @@ public class DialogActivity extends AppCompatActivity {
                 }
 
                 startGoogleActivityFromdialog();
-                Toast.makeText(DialogActivity.this, "you've clicked start", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(DialogActivity.this, "you've clicked start", Toast.LENGTH_SHORT).show();
             }
         }).setNegativeButton("cancel", new DialogInterface.OnClickListener() {
             @Override
@@ -139,12 +139,12 @@ public class DialogActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                Toast.makeText(DialogActivity.this, "you've clicked cancel", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(DialogActivity.this, "you've clicked cancel", Toast.LENGTH_SHORT).show();
             }
         }).setNeutralButton("snooze", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(DialogActivity.this, "you've clicked snooze", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(DialogActivity.this, "you've clicked snooze", Toast.LENGTH_SHORT).show();
                 finish();
                 mp.stop();
                 showNotification();
