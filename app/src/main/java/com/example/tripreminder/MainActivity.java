@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if(id ==R.id.logout)
         {
-         AlertDialog diaBox = AskOption();
+        AlertDialog diaBox = AskOption();
             diaBox.show();
 
 
@@ -272,7 +272,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
     }
+    private void cancelAllAlarm() throws ExecutionException, InterruptedException {
+        List<Trips> trips = viewModel.getUpcomingTrips();
+        for (Trips t : trips) {
+                cancelAlarm(t.getId());
+        }
+    }
+    private void cancelAlarm(int requestCode) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent broadcastIntent= new Intent(MainActivity.this,NotificationReceiver.class);
+        broadcastIntent.putExtra(notificationIntentKey,"say goodbye to your data");
+        PendingIntent pendingBroadcastIntent=PendingIntent.getBroadcast(MainActivity.this,requestCode,
+                broadcastIntent,0);
+        alarmManager.cancel(pendingBroadcastIntent);
+        pendingBroadcastIntent.cancel();
 
+
+    }
     private void checkDrawOverAppsPermissionsDialog(){
         new AlertDialog.Builder(this).setTitle("Permission request").setCancelable(false).setMessage("Allow Draw Over Apps Permission to be able to use application probably")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -425,6 +441,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .setPositiveButton("Logout", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         //your deleting code
+                        try {
+                            cancelAllAlarm();
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         viewModel.deleteAllTrips();
                         FirebaseAuth.getInstance().signOut();
                         startActivity(new Intent(getApplicationContext(), SignIn.class));

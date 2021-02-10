@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="@color/purbleApp"
     android:layout_marginBottom="20dp"
     tools:context=".headeractivity">
 
@@ -13,31 +14,34 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="40dp"
-        android:background="@color/purbleApp"
-        android:orientation="vertical">
-        <!--
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+        android:layout_marginStart="10dp"
+        android:orientation="horizontal">
 
-        >
-
-        </ImageView>-->
+       <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/r" />
 
         <TextView
-           android:id="@+id/name"
+            android:layout_marginTop="7dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="olaabaza020@gmail.com"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="5dp"
+            android:text="eminder"
             android:textColor="@color/white"
-            android:padding="5dp"
-            android:textSize="18dp" />
-
-
+            android:textStyle="bold"
+            android:textSize="30sp" />
     </LinearLayout>
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="olaabaza020@gmail.com"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/white"
+        android:padding="5dp"
+        android:textSize="18dp" />
 <!--
        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_image"

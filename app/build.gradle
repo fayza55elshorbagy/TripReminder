@@ -58,6 +58,7 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     implementation 'com.google.android.gms:play-services-location:17.1.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation platform('com.google.firebase:firebase-bom:26.3.0')
     implementation 'com.google.firebase:firebase-analytics'
@@ -69,6 +70,8 @@ dependencies {
 
     implementation 'com.google.maps:google-maps-services:0.16.1'
     implementation 'org.slf4j:slf4j-simple:1.7.25'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+
 
     //bubble
     implementation 'com.txusballesteros:bubbles:1.2.1'

@@ -28,6 +28,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -43,6 +44,7 @@ public class SignIn extends AppCompatActivity {
     public static Thread readFireBaseThread;
     private TripsViewModel viewModel;
     FirebaseUser firebaseUser;
+    List<Trips> upcomingList;
     @Override
     protected void onStart() {
         super.onStart();
@@ -65,14 +67,15 @@ public class SignIn extends AppCompatActivity {
                 }else {
                     Log.i("click","Trip : "+arr);
                     viewModel.insertAll(arr);
-                    MainActivity.progressBar_up.setVisibility(View.GONE);
                     try {
-                        cancelAllAlarm();
+                        upcomingList=viewModel.getUpcomingTrips();
+                       setAllAlarm();
                     } catch (ExecutionException e) {
                         e.printStackTrace();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    MainActivity.progressBar_up.setVisibility(View.GONE);
                    // startActivity(new Intent(getApplicationContext(),MainActivity.class));
                     finish();
                     // System.out.println("the first note of first element :  " + TotalUserData.get(1).getNotes().get(2) + "");
@@ -163,25 +166,21 @@ public class SignIn extends AppCompatActivity {
         editor.commit();
         Log.i("click","email is : "+n2);
     }
-    private void cancelAllAlarm() throws ExecutionException, InterruptedException {
-        List<Trips> trips = viewModel.getAll();
-        for (Trips t : trips) {
-            if (t.getStatus() == 0) {
-                cancelAlarm(t.getId());
-
-            }
-
-        }
-    }
-    private void cancelAlarm(int requestCode) {
+    private void setAlarm(Calendar calendar, long id) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent broadcastIntent= new Intent(SignIn.this,NotificationReceiver.class);
         broadcastIntent.putExtra(notificationIntentKey,"say goodbye to your data");
-        PendingIntent pendingBroadcastIntent=PendingIntent.getBroadcast(SignIn.this,requestCode,
+        broadcastIntent.putExtra("id",id);
+        PendingIntent pendingBroadcastIntent=PendingIntent.getBroadcast(SignIn.this, (int) id,
                 broadcastIntent,0);
-        alarmManager.cancel(pendingBroadcastIntent);
-        pendingBroadcastIntent.cancel();
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingBroadcastIntent);
 
 
+    }
+    private void setAllAlarm(){
+        for(Trips t:upcomingList){
+            Log.i("ola","kk"+t.getCalender().get(Calendar.HOUR)+" ff "+ t.getCalender().get(Calendar.MINUTE)+"   "+t.getCalender().get(Calendar.DAY_OF_MONTH)+"  "+t.getCalender().get(Calendar.YEAR)+"  "+t.getCalender().get(Calendar.MONTH));
+            setAlarm(t.getCalender(),t.getId());
+        }
     }
 }
