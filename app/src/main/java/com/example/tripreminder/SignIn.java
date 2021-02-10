@@ -173,14 +173,38 @@ public class SignIn extends AppCompatActivity {
         broadcastIntent.putExtra("id",id);
         PendingIntent pendingBroadcastIntent=PendingIntent.getBroadcast(SignIn.this, (int) id,
                 broadcastIntent,0);
+        Log.i("ola"," "+calendar.getTimeInMillis()+" "+id);
         alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingBroadcastIntent);
 
 
     }
     private void setAllAlarm(){
         for(Trips t:upcomingList){
-            Log.i("ola","kk"+t.getCalender().get(Calendar.HOUR)+" ff "+ t.getCalender().get(Calendar.MINUTE)+"   "+t.getCalender().get(Calendar.DAY_OF_MONTH)+"  "+t.getCalender().get(Calendar.YEAR)+"  "+t.getCalender().get(Calendar.MONTH));
-            setAlarm(t.getCalender(),t.getId());
+           // Log.i("ola","kk"+t.getCalender().get(Calendar.HOUR_OF_DAY)+" ff "+ t.getCalender().get(Calendar.MINUTE)+"   "+t.getCalender().get(Calendar.DAY_OF_MONTH)+"  "+t.getCalender().get(Calendar.YEAR)+"  "+t.getCalender().get(Calendar.MONTH)+"id"+t.getId());
+            if(calenderValidation(t.getCalender())){
+                 setAlarm(t.getCalender(),t.getId());
+                 Log.i("ola","if"+t.getCalender().get(Calendar.HOUR_OF_DAY));
+            }
+            else
+                Log.i("ola","else"+t.getCalender().get(Calendar.HOUR_OF_DAY));
+
+
+        }
+    }
+    public Boolean calenderValidation(Calendar calendar){
+        Calendar currentCalendar = Calendar.getInstance();
+        currentCalendar.set(Calendar.YEAR,currentCalendar.get(Calendar.YEAR));
+        currentCalendar.set(Calendar.MONTH,currentCalendar.get(Calendar.MONTH));
+        currentCalendar.set(Calendar.DAY_OF_MONTH,currentCalendar.get(Calendar.DAY_OF_MONTH));
+        currentCalendar.set(Calendar.HOUR_OF_DAY,currentCalendar.get(Calendar.HOUR_OF_DAY));
+        currentCalendar.set(Calendar.MINUTE,currentCalendar.get(Calendar.MINUTE));
+        currentCalendar.set(Calendar.SECOND,0);
+        Log.i("ola","valid"+currentCalendar.get(Calendar.HOUR_OF_DAY)+"calendar"+calendar.get(Calendar.HOUR_OF_DAY));
+        if((calendar.getTimeInMillis()-currentCalendar.getTimeInMillis())<=0){
+            return false;
+        }
+        else {
+            return true;
         }
     }
 }

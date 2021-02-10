@@ -306,6 +306,7 @@ public class addTripActivity extends AppCompatActivity  {
                     // String end = endPoint.getText().toString();
                     String name = tripName.getText().toString();
                     String time = timeText.getText().toString();
+                    Log.i("ola","time:t"+time);
                     String date = dateText.getText().toString();
                     String timeBack,dateBack;
                     if(editMode){
@@ -493,12 +494,15 @@ public class addTripActivity extends AppCompatActivity  {
             myCalendar.set(Calendar.HOUR_OF_DAY,selectedHour);
             myCalendar.set(Calendar.MINUTE,selectedMinute);
             isTimeSelect=true;
-            SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm aa");
-            timeText.setText( timeFormat.format(myCalendar.getTime()));
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+            String chosenTime = DateFormat.getTimeInstance().format(myCalendar.getTime());
+           // Log.i("ola",chosenTime);
+
+            timeText.setText(chosenTime);
             btnTime.setColorFilter(getResources().getColor(R.color.purbleApp), PorterDuff.Mode.SRC_ATOP);
 
         }
-    }, hour, minute, true);//Yes 24 hour time
+    }, hour, minute, android.text.format.DateFormat.is24HourFormat(getApplicationContext()));//Yes 24 hour time
         mTimePicker.setTitle("Select Time");
         mTimePicker.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         mTimePicker.show();}
