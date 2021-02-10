@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -133,7 +134,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             PolylineOptions opts = new PolylineOptions().addAll(path).color(randomColor).width(5);
             map.addPolyline(opts);
         }
-
+        
         map.getUiSettings().setZoomControlsEnabled(true);
 
     }
