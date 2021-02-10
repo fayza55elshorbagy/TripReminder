@@ -1,5 +1,7 @@
 package com.example.tripreminder.beans;
 
+import android.util.Log;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -28,6 +30,7 @@ public class Trips implements Serializable {
     private String time;
     private String date;
     private String notes;
+
 
 
     @Ignore
@@ -206,14 +209,13 @@ public class Trips implements Serializable {
     public Calendar getCalender(){
         String [] mdate=date.split("-");
         String [] mtime=time.split(":");
-        String [] min=mtime[1].split(" ");
-
+        Log.i("ola","ttttime:"+time+"  "+ mtime[0]);
         Calendar myCalendar = Calendar.getInstance();
         myCalendar.set(Calendar.YEAR, Integer.parseInt(mdate[2]));
         myCalendar.set(Calendar.MONTH, Integer.parseInt(mdate[1]));
         myCalendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(mdate[0]));
         myCalendar.set(Calendar.HOUR_OF_DAY,Integer.parseInt(mtime[0]));
-        myCalendar.set(Calendar.MINUTE,Integer.parseInt(min[0]));
+        myCalendar.set(Calendar.MINUTE,Integer.parseInt(mtime[1]));
         myCalendar.set(Calendar.SECOND,0);
         return myCalendar;
     }
