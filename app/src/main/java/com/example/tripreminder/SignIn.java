@@ -63,7 +63,7 @@ public class SignIn extends AppCompatActivity {
                 super.handleMessage(msg);
                 arr = (ArrayList<Trips>) msg.obj;
                 if(arr.size() == 0){
-                    Toast.makeText(SignIn.this, "You don't have data", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(SignIn.this, "You don't have data", Toast.LENGTH_SHORT).show();
                 }else {
                     Log.i("click","Trip : "+arr);
                     viewModel.insertAll(arr);
@@ -108,6 +108,7 @@ public class SignIn extends AppCompatActivity {
                     .createSignInIntentBuilder()
                     .setAvailableProviders(providers)
                     .setTheme(R.style.loginTheme)
+                    .setLogo(R.drawable.ic_lock)
                     .build(),AUTH_REC);
         }
     }
@@ -148,7 +149,6 @@ public class SignIn extends AppCompatActivity {
                 if(firebaseUser != null)
                 {
 
-                    //Toast.makeText(SignIn.this, "nulll.", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(getApplicationContext(),MainActivity.class));
                     finish();
                 }
