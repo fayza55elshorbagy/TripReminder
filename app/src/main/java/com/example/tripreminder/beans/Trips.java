@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -201,6 +202,20 @@ public class Trips implements Serializable {
 
     public void setId(int id) {
         Id = id;
+    }
+    public Calendar getCalender(){
+        String [] mdate=date.split("-");
+        String [] mtime=time.split(":");
+        String [] min=mtime[1].split(" ");
+
+        Calendar myCalendar = Calendar.getInstance();
+        myCalendar.set(Calendar.YEAR, Integer.parseInt(mdate[2]));
+        myCalendar.set(Calendar.MONTH, Integer.parseInt(mdate[1]));
+        myCalendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(mdate[0]));
+        myCalendar.set(Calendar.HOUR_OF_DAY,Integer.parseInt(mtime[0]));
+        myCalendar.set(Calendar.MINUTE,Integer.parseInt(min[0]));
+        myCalendar.set(Calendar.SECOND,0);
+        return myCalendar;
     }
 
 }

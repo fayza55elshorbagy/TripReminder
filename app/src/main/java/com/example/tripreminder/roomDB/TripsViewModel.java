@@ -44,5 +44,6 @@ public class TripsViewModel extends AndroidViewModel {
 
 
     public List<Trips> getDoneTrips() throws ExecutionException, InterruptedException { return mRepository.getDoneTrips(); }
+    public List<Trips> getUpcomingTrips() throws ExecutionException, InterruptedException { return mRepository.getUpcoming(); }
 
 }
