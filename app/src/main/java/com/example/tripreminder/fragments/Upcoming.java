@@ -186,6 +186,7 @@ public class Upcoming extends Fragment {
                    endLongitude = parseDouble(trip.getEndLng());
                    trip.setStatus(2);
                    viewModel.update(trip);
+                   cancelAlarm(trip.getId());
                    Thread th = new Thread() {
                        @Override
                        public void run() {
