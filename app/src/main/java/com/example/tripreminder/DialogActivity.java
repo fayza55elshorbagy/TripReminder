@@ -46,7 +46,8 @@ public class DialogActivity extends AppCompatActivity {
     double endLatitude;
     double endLongitude;
     private int MY_PERMISSION = 100;
-
+    long TrripId;
+    Trips l;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,12 +57,20 @@ public class DialogActivity extends AppCompatActivity {
 
         Log.e("NOTWORKING", "dialog activity");
          Intent intent= getIntent();
-        long TrripId=  intent.getLongExtra("mid",-1);
+         TrripId=  intent.getLongExtra("mid",-1);
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(DialogActivity.this);
         /*View view = LayoutInflater.from(DialogActivity.this).inflate(R.layout.activity_hacked,null);
         alertDialog.setView(view);
         alertDialog.create().show();*/
         viewModel= ViewModelProviders.of(this).get(TripsViewModel.class);
+        try {
+            l=viewModel.getTripById(TrripId);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         final MediaPlayer mp = MediaPlayer.create(DialogActivity.this, R.raw.police);
         mp.start();
         mp.setLooping(true);
@@ -75,11 +84,9 @@ public class DialogActivity extends AppCompatActivity {
 
             }
         };
-        alertDialog.setTitle("HOLA AMIGO").setMessage("QUE TAL?").setPositiveButton("start", new DialogInterface.OnClickListener() {
+        alertDialog.setTitle("Reminder").setMessage("Do You want to start your trip titled: "+l.getName()).setPositiveButton("start", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                try {
-                    Trips l=viewModel.getTripById(TrripId);
 
                     endLatitude = parseDouble(l.getEndLat());
                     endLongitude = parseDouble(l.getEndLng());
@@ -110,11 +117,7 @@ public class DialogActivity extends AppCompatActivity {
                     };
                     splash.start();
 
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+
 
                 startGoogleActivityFromdialog();
                 //Toast.makeText(DialogActivity.this, "you've clicked start", Toast.LENGTH_SHORT).show();
@@ -195,17 +198,19 @@ public class DialogActivity extends AppCompatActivity {
 
     }
 
+
     private void showNotification(){
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
             NotificationChannel channel1=new NotificationChannel(channel1ID,
-                    "HITLER", NotificationManager.IMPORTANCE_HIGH);
-            channel1.setDescription("YOU HAVE BEEN HACKED");
+                    "Reminder", NotificationManager.IMPORTANCE_HIGH);
+            channel1.setDescription("your trip is now");
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel1);
         }
         Intent hackedIntent = new Intent(this, DialogActivity.class);
+        hackedIntent.putExtra("mid",TrripId);
         hackedIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingHackedIntent = PendingIntent.getActivity(this,1,
+        PendingIntent pendingHackedIntent = PendingIntent.getActivity(this, (int) TrripId,
                 hackedIntent,0);
         Intent broadcastIntent= new Intent(this, NotificationReceiver.class);
         broadcastIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -214,16 +219,14 @@ public class DialogActivity extends AppCompatActivity {
                 broadcastIntent,PendingIntent.FLAG_UPDATE_CURRENT);
         Notification notification = new NotificationCompat.Builder(this, channel1ID)
                 .setSmallIcon(R.drawable.ic_warning)
-                .setContentTitle("HITLER").setContentText("YOU HAVE BEEN HACKED")
+                .setContentTitle("Reminder").setContentText("start your trip")
                 .setPriority(NotificationManager.IMPORTANCE_HIGH)
                 .setContentIntent(pendingHackedIntent)
-                .addAction(R.drawable.ic_warning,"TOAST",pendingBroadcastIntent)
                 .setAutoCancel(true)
                 .setOngoing(true)
                 .build();
         notificationManagerCompat.notify(1,notification);
     }
-
 
     @Override
     protected void onDestroy() {

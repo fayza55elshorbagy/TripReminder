@@ -78,10 +78,9 @@ public class SignIn extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    // System.out.println("the first note of first element :  " + TotalUserData.get(1).getNotes().get(2) + "");
                 }
                 MainActivity.progressBar.setVisibility(View.INVISIBLE);
-                // startActivity(new Intent(getApplicationContext(),MainActivity.class));
+
                 finish();
             }
         };
