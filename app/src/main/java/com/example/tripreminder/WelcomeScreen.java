@@ -40,7 +40,6 @@ public class WelcomeScreen extends AppCompatActivity {
 
         if(flag == 1)
         {
-
             editor.putInt("flag",++flag);
             flag = 2;
         }
