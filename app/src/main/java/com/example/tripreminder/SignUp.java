@@ -31,7 +31,6 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-
 public class SignUp extends AppCompatActivity {
     EditText firstName;
     EditText u_phone;

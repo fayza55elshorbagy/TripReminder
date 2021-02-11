@@ -148,8 +148,14 @@ public class DialogActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                // Toast.makeText(DialogActivity.this, "you've clicked snooze", Toast.LENGTH_SHORT).show();
-                finish();
-                mp.stop();
+                new Thread()
+                {   public void run() {
+                    Trips trip=new Trips(l.getName(),l.getStartPoint(),l.getEndPoint(),5,l.getType(),l.getTime(),l.getDate(),l.getNotes());
+                    trip.setId((int) TrripId);
+                    viewModel.update(trip);
+                    cancelHandler.sendEmptyMessage(0);
+                }
+                }.start();
                 showNotification();
             }
         });
