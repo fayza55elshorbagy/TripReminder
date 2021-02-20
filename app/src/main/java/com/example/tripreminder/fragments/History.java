@@ -10,16 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,32 +26,15 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.tripreminder.R;
 import com.example.tripreminder.adapters.HistoryAdapter;
 import com.example.tripreminder.adapters.notesAdapter;
-import com.example.tripreminder.beans.HistoryListener;
+import com.example.tripreminder.adapters.HistoryListener;
 import com.example.tripreminder.beans.Trips;
 import com.example.tripreminder.roomDB.TripsViewModel;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.tripreminder.NotificationReceiver;
-import com.example.tripreminder.R;
-import com.example.tripreminder.adapters.HistoryAdapter;
-import com.example.tripreminder.adapters.UpcomingTripAdapter;
-import com.example.tripreminder.adapters.notesAdapter;
-import com.example.tripreminder.addTripActivity;
-import com.example.tripreminder.beans.HistoryListener;
-import com.example.tripreminder.beans.TripListener;
-import com.example.tripreminder.beans.Trips;
-import com.example.tripreminder.roomDB.TripsViewModel;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +48,8 @@ public class History extends Fragment {
     private TripsViewModel viewModel;
     private HistoryListener itemListener;
     public static Dialog dialog;
+    private TextView msg;
+    LottieAnimationView animationView;
     ArrayList<String> noteList = new ArrayList<>();
 
     public History() {
@@ -89,7 +71,8 @@ public class History extends Fragment {
         recyclerView=view.findViewById(R.id.historyRecView);
         adapter=new HistoryAdapter(itemListener);
         recyclerView.setAdapter(adapter);
-
+        msg=view.findViewById(R.id.msg);
+        animationView = view.findViewById(R.id.animationView);
         viewModel= ViewModelProviders.of(this).get(TripsViewModel.class);
         viewModel.getAllTrips().observe(getViewLifecycleOwner(), new Observer<List<Trips>>() {
             @Override
@@ -100,7 +83,14 @@ public class History extends Fragment {
                         hisyoryTrips.add(t);
                 }
                 adapter.saveTrips(hisyoryTrips);
-                Log.i("note","ol  "+trips.toString());
+                if(hisyoryTrips.size()==0) {
+                    msg.setVisibility(View.VISIBLE);
+                    animationView.setVisibility(View.VISIBLE);
+                }
+                else {
+                    msg.setVisibility(View.INVISIBLE);
+                    animationView.setVisibility(View.INVISIBLE);
+                }
                // Toast.makeText(getContext(), "Added Successfully", Toast.LENGTH_LONG).show();
             }
         });
@@ -116,7 +106,6 @@ public class History extends Fragment {
         itemListener = new HistoryListener() {
             @Override
             public void delete(Trips trip) {
-                viewModel.delete(trip);
                 AlertDialog diaBox = AskOption(trip);
                 diaBox.show();
                 cancelAlarm(trip.getId());

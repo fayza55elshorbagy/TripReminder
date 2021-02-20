@@ -1,14 +1,10 @@
 package com.example.tripreminder;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.Dialog;
 import android.app.Service;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PixelFormat;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.util.TypedValue;
@@ -19,20 +15,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.tripreminder.adapters.notesAdapter;
-import com.example.tripreminder.beans.HistoryListener;
-import com.example.tripreminder.beans.Trips;
-import com.example.tripreminder.fragments.Upcoming;
 import com.txusballesteros.bubbles.BubbleLayout;
 
 import java.util.ArrayList;

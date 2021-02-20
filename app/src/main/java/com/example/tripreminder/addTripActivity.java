@@ -74,8 +74,8 @@ public class addTripActivity extends AppCompatActivity  {
 
     private LinearLayout round_details;
     private LinearLayout trip_type;
-    RadioButton single;
-    RadioButton round;
+    private RadioButton single;
+    private RadioButton round;
 
     private TripsViewModel viewModel;
     private Boolean editMode;
@@ -88,17 +88,17 @@ public class addTripActivity extends AppCompatActivity  {
     private Calendar myCalendar;
     private Calendar  myCurrentCalendar;
     private TimePickerDialog mTimePicker;
-    private int hour;
-    private int minute;
+    private TimePickerDialog mTimePickerBack;
+
     private Date selectedDate = null;
     private Date currentDate = null;
     private Date selectedBackDate = null;
     private Boolean isDateSelect=false;
     private Boolean isTimeSelect=false;
     private SimpleDateFormat dateFormant;
-    SimpleDateFormat tDateFormant;
-    Handler handler;
-    Handler handlerBack;
+    private SimpleDateFormat tDateFormant;
+    private Handler insertHandler;
+    private  Handler handlerInsertRound;
     private long id;
     private static int AUTOCOMPLETE_REQUEST_CODE_START = 1;
     private static int AUTOCOMPLETE_REQUEST_CODE_END = 2;
@@ -109,35 +109,15 @@ public class addTripActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_trip);
         setSupportActionBar(toolBar);
+        initialize();
+        setDate();
+        setTime();
+        setBackTime();
+        setBackDate();
 
         if (!Places.isInitialized()) {
             Places.initialize(getApplicationContext(), "AIzaSyALHrPpUa1o9Hc-6zTue0nt_CgM0tJa_pc", Locale.getDefault());
         }
-
-        tDateFormant =new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        dateFormant =new SimpleDateFormat("dd-MM-yyyy");
-        backCalendar = Calendar.getInstance();
-        myCalendar = Calendar.getInstance();
-        myCurrentCalendar= Calendar.getInstance();
-        btnDate= (ImageView) findViewById(R.id.calender_btn);
-        btnTime= (ImageView) findViewById(R.id.alarm_btn);
-        dateText= (TextView)findViewById(R.id.dateText);
-        timeText= (TextView)findViewById(R.id.alarmTextView);
-        tripName=(EditText)findViewById(R.id.tripName);
-        startPoint=(EditText)findViewById(R.id.startPoint);
-        endPoint=(EditText)findViewById(R.id.endPoint);
-        addBtn=(Button)findViewById(R.id.btn_add);
-        single = findViewById(R.id.single_trip);
-        round = findViewById(R.id.round_trip);
-        dateBackText= (TextView)findViewById(R.id.date_back);
-        timeBackText= (TextView)findViewById(R.id.alarm_back);
-        btnDateBack= (ImageView) findViewById(R.id.calender_btn_back);
-        btnTimeBack= (ImageView) findViewById(R.id.alarm_btn_back);
-        round_details=(LinearLayout) findViewById(R.id.round_layout);
-        trip_type=(LinearLayout) findViewById(R.id.tripTypeLayout);
-        toolBar=(Toolbar) findViewById(R.id.toolbar);
-
-        viewModel= ViewModelProviders.of(this).get(TripsViewModel.class);
 
         Intent intentTrip =getIntent();
         if(intentTrip.hasExtra(TRIP_ID)){
@@ -159,105 +139,10 @@ public class addTripActivity extends AppCompatActivity  {
             btnTime.setColorFilter(getResources().getColor(R.color.purbleApp), PorterDuff.Mode.SRC_ATOP);
             btnDate.setColorFilter(getResources().getColor(R.color.purbleApp), PorterDuff.Mode.SRC_ATOP);
             }
-           else{
+        else{
                 editMode=false;
                 toolBar.setTitle("Add");
         }
-
-        DatePickerDialog.OnDateSetListener datePicker = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-               // String dateStr = dayOfMonth+"/"+(monthOfYear+1)+"/"+year;
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                isDateSelect=true;
-                try {
-                    currentDate = dateFormant.parse(dateFormant.format(myCurrentCalendar.getTime()));
-                    selectedDate = dateFormant.parse(dateFormant.format(myCalendar.getTime()));
-                    if (currentDate.before(selectedDate) || currentDate.equals(selectedDate)) {
-                        btnDate.setColorFilter(getResources().getColor(R.color.purbleApp), PorterDuff.Mode.SRC_ATOP);
-                        dateText.setText( dateFormant.format(myCalendar.getTime()));
-                       // dateText.setText(dateStr);
-                    } else
-                        Toast.makeText(addTripActivity.this, "Set valid date", Toast.LENGTH_LONG).show();
-                  //  Toast.makeText(addTripActivity.this, "Set valid date"+currentDate+"  sel "+selectedDate, Toast.LENGTH_LONG).show();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        DatePickerDialog.OnDateSetListener dateBackPicker = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-               // String dateStr = dayOfMonth+"/"+(monthOfYear+1)+"/"+year;
-                backCalendar.set(Calendar.YEAR, year);
-                backCalendar.set(Calendar.MONTH, monthOfYear);
-                backCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                try {
-                    selectedBackDate = dateFormant.parse(dateFormant.format(backCalendar.getTime()));
-                    selectedDate = dateFormant.parse(dateFormant.format(myCalendar.getTime()));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                    if (selectedDate.before(selectedBackDate) || selectedDate.equals(selectedBackDate)) {
-                        btnDateBack.setColorFilter(getResources().getColor(R.color.purbleApp), PorterDuff.Mode.SRC_ATOP);
-                        dateBackText.setText( dateFormant.format(backCalendar.getTime()));
-                    } else
-                        Toast.makeText(addTripActivity.this, "Set valid date", Toast.LENGTH_LONG).show();
-            }
-        };
-        btnDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatePickerDialog datePickerDialog= new DatePickerDialog(addTripActivity.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, datePicker, myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH));
-                datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                datePickerDialog.setTitle("Select Date");
-                datePickerDialog.show();
-
-            }
-        });
-        btnTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                 hour = myCurrentCalendar.get(Calendar.HOUR_OF_DAY);
-                 minute = myCurrentCalendar.get(Calendar.MINUTE);
-                 myCalendar.set(Calendar.SECOND,0);
-                 setTime();
-
-            }
-        });
-        btnDateBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(isDateSelect) {
-                    DatePickerDialog datePickerDialog = new DatePickerDialog(addTripActivity.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, dateBackPicker, backCalendar
-                            .get(Calendar.YEAR), backCalendar.get(Calendar.MONTH),
-                            backCalendar.get(Calendar.DAY_OF_MONTH));
-                    datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                    datePickerDialog.setTitle("Select Date");
-                    datePickerDialog.show();
-                }
-                else
-                    Toast.makeText(addTripActivity.this, "set the start date ", Toast.LENGTH_LONG).show();
-            }
-        });
-        btnTimeBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(isTimeSelect) {
-                    hour = myCurrentCalendar.get(Calendar.HOUR_OF_DAY);
-                    minute = myCurrentCalendar.get(Calendar.MINUTE);
-                    myCurrentCalendar.set(Calendar.SECOND, 0);
-                    setBackTime();
-                }
-                else
-                    Toast.makeText(addTripActivity.this, "set the start Time ", Toast.LENGTH_LONG).show();
-            }
-        });
-
 
         round.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -269,94 +154,8 @@ public class addTripActivity extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
                 round_details.setVisibility(View.GONE);
-
             }
         });
-        handler=new Handler(){
-            @Override
-            public void handleMessage(@NonNull Message msg) {
-                super.handleMessage(msg);
-                finish();
-                setAlarm(myCalendar,id);
-
-
-            }
-        };
-        handlerBack=new Handler(){
-            @Override
-            public void handleMessage(@NonNull Message msg) {
-                super.handleMessage(msg);
-                finish();
-                setAlarm(backCalendar,id);
-
-
-            }
-        };
-        addBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if(!Settings.canDrawOverlays(addTripActivity.this)) {
-                        errorWarningForNotGivingDrawOverAppsPermissions();
-                    }
-                }
-                Boolean valid=validateInput();
-                if(valid) {
-                    // String start = startPoint.getText().toString();
-                    // String end = endPoint.getText().toString();
-                    String name = tripName.getText().toString();
-                    String time = timeText.getText().toString();
-                    Log.i("ola","time:t"+time);
-                    String date = dateText.getText().toString();
-                    String timeBack,dateBack;
-                    if(editMode){
-                        Trips tripObj=new Trips(name, strStartPoint, strEndPoint, 0, 0, time, date,editObj.allNotes(editObj.getNotesList()));
-                        tripObj.setId(tripID);
-                        viewModel.update(tripObj);
-                        cancelAlarm(tripObj.getId());
-                        setAlarm(myCalendar,tripObj.getId());
-                        finish();
-                    }
-                    else{
-                        if (single.isChecked()){
-                                new Thread()
-                                {
-                                    public void run() {
-                                        Trips trip=new Trips(name, strStartPoint, strEndPoint, 0, 0, time, date,"");
-                                        id= viewModel.insert(trip);
-                                        handler.sendEmptyMessage(0);
-                                    }
-                                }.start();
-                        }
-                        else if(round.isChecked()) {
-                            if (validateBackTime()) {
-                                timeBack = timeBackText.getText().toString();
-                                dateBack = dateBackText.getText().toString();
-                                new Thread()
-                                {
-                                    public void run() {
-                                        id=viewModel.insert(new Trips(name, strStartPoint, strEndPoint, 0, 1, time, date, ""));
-                                        handler.sendEmptyMessage(0);
-                                    }
-                                }.start();
-                                new Thread()
-                                {
-                                    public void run() {
-                                        id=viewModel.insert(new Trips(name, strEndPoint, strStartPoint, 0, 1, timeBack, dateBack, ""));
-                                        handlerBack.sendEmptyMessage(0);
-                                    }
-                                }.start();
-                            }
-                            else
-                                Toast.makeText(addTripActivity.this, "set valid back time", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                     //clearText();
-                }
-            }
-        });
-
-
         startPoint.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
                 List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME,Place.Field.LAT_LNG);
@@ -377,45 +176,89 @@ public class addTripActivity extends AppCompatActivity  {
 
             }
         });
+        insertHandler=new Handler(){
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                super.handleMessage(msg);
+                finish();
+                Log.i("ola","koo"+myCalendar);
+                setAlarm(myCalendar,id);
 
-    }
-    private boolean validateInput() {
-        boolean isTime=validateTime();
-        if (tripName.getText().toString().trim().length() ==0)
-            Toast.makeText(addTripActivity.this, "Trip Name Is Empty", Toast.LENGTH_SHORT).show();
-        else if (strStartPoint == "")
-            Toast.makeText(addTripActivity.this, "Start Point Not Specified", Toast.LENGTH_SHORT).show();
-        else if (strEndPoint == "")
-            Toast.makeText(addTripActivity.this, "End Point Not Specified", Toast.LENGTH_SHORT).show();
-        else if(!isTime)
-            Toast.makeText(addTripActivity.this, "Set valid time", Toast.LENGTH_LONG).show();
-        else if (timeText.getText().toString().trim().length() ==0)
-            Toast.makeText(addTripActivity.this, "Time Not Specified", Toast.LENGTH_SHORT).show();
-        else if (dateText.getText().toString().trim().length() ==0)
-            Toast.makeText(addTripActivity.this, "Date Not Specified", Toast.LENGTH_SHORT).show();
-        else if (round.isChecked()){
-            if (timeBackText.getText().toString().trim().length() ==0)
-                Toast.makeText(addTripActivity.this, "Round Time  Not Specified", Toast.LENGTH_SHORT).show();
-            else if (dateBackText.getText().toString().trim().length() ==0)
-                Toast.makeText(addTripActivity.this, "Round Date Not Specified", Toast.LENGTH_SHORT).show();
-            else
-                return true;
-        }
-        else
-            return true;
 
-        return false;
-    }
-    private void clearText(){
-        startPoint.setText("");
-        endPoint.setText("");
-        tripName.setText("");
-        dateText.setText("");
-        timeText.setText("");
-        dateBackText.setText("");
-        timeBackText.setText("");
-        btnTime.setColorFilter(getResources().getColor(R.color.gray), PorterDuff.Mode.SRC_ATOP);
-        btnDate.setColorFilter(getResources().getColor(R.color.gray), PorterDuff.Mode.SRC_ATOP);
+            }
+        };
+        handlerInsertRound=new Handler(){
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                super.handleMessage(msg);
+                finish();
+                setAlarm(backCalendar,id);
+
+
+            }
+        };
+        addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if(!Settings.canDrawOverlays(addTripActivity.this)) {
+                        errorWarningForNotGivingDrawOverAppsPermissions();
+                    }
+                }
+                Boolean valid=validateInput();
+                if(valid) {
+                    String name = tripName.getText().toString();
+                    String time = timeText.getText().toString();
+                    String date = dateText.getText().toString();
+                    String timeBack,dateBack;
+                    if(editMode){
+                        Trips tripObj=new Trips(name, strStartPoint, strEndPoint, 0, 0, time, date,editObj.allNotes(editObj.getNotesList()));
+                        tripObj.setId(tripID);
+                        viewModel.update(tripObj);
+                        cancelAlarm(tripObj.getId());
+                        setAlarm(tripObj.getCalender(),tripObj.getId());
+                        finish();
+                    }
+                    else{
+                        if (single.isChecked()){
+                                new Thread()
+                                {
+                                    public void run() {
+                                        Trips trip=new Trips(name, strStartPoint, strEndPoint, 0, 0, time, date,"");
+                                        id= viewModel.insert(trip);
+                                        insertHandler.sendEmptyMessage(0);
+                                    }
+                                }.start();
+                        }
+                        else if(round.isChecked()) {
+                            if (validateBackTime()) {
+                                timeBack = timeBackText.getText().toString();
+                                dateBack = dateBackText.getText().toString();
+                                new Thread()
+                                {
+                                    public void run() {
+                                        id=viewModel.insert(new Trips(name, strStartPoint, strEndPoint, 0, 1, time, date, ""));
+                                        insertHandler.sendEmptyMessage(0);
+                                    }
+                                }.start();
+                                new Thread()
+                                {
+                                    public void run() {
+                                        id=viewModel.insert(new Trips(name, strEndPoint, strStartPoint, 0, 1, timeBack, dateBack, ""));
+                                        handlerInsertRound.sendEmptyMessage(0);
+                                    }
+                                }.start();
+                            }
+                            else
+                                Toast.makeText(addTripActivity.this, "set valid back time", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }
+            }
+        });
+
+
+
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -456,6 +299,34 @@ public class addTripActivity extends AppCompatActivity  {
         }
 
     }
+
+    private boolean validateInput() {
+        boolean isTime=validateTime();
+        if (tripName.getText().toString().trim().length() ==0)
+            Toast.makeText(addTripActivity.this, "Trip Name Is Empty", Toast.LENGTH_SHORT).show();
+        else if (strStartPoint == "")
+            Toast.makeText(addTripActivity.this, "Start Point Not Specified", Toast.LENGTH_SHORT).show();
+        else if (strEndPoint == "")
+            Toast.makeText(addTripActivity.this, "End Point Not Specified", Toast.LENGTH_SHORT).show();
+        else if(!isTime)
+            Toast.makeText(addTripActivity.this, "Set valid time", Toast.LENGTH_LONG).show();
+        else if (timeText.getText().toString().trim().length() ==0)
+            Toast.makeText(addTripActivity.this, "Time Not Specified", Toast.LENGTH_SHORT).show();
+        else if (dateText.getText().toString().trim().length() ==0)
+            Toast.makeText(addTripActivity.this, "Date Not Specified", Toast.LENGTH_SHORT).show();
+        else if (round.isChecked()){
+            if (timeBackText.getText().toString().trim().length() ==0)
+                Toast.makeText(addTripActivity.this, "Round Time  Not Specified", Toast.LENGTH_SHORT).show();
+            else if (dateBackText.getText().toString().trim().length() ==0)
+                Toast.makeText(addTripActivity.this, "Round Date Not Specified", Toast.LENGTH_SHORT).show();
+            else
+                return true;
+        }
+        else
+            return true;
+
+        return false;
+    }
     private void setAlarm(Calendar calendar,long id) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent broadcastIntent= new Intent(addTripActivity.this,NotificationReceiver.class);
@@ -487,7 +358,42 @@ public class addTripActivity extends AppCompatActivity  {
 
     }
 
+    private void initialize(){
+        tDateFormant =new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        dateFormant =new SimpleDateFormat("dd-MM-yyyy");
+        backCalendar = Calendar.getInstance();
+        myCalendar = Calendar.getInstance();
+        myCurrentCalendar= Calendar.getInstance();
+        btnDate= (ImageView) findViewById(R.id.calender_btn);
+        btnTime= (ImageView) findViewById(R.id.alarm_btn);
+        dateText= (TextView)findViewById(R.id.dateText);
+        timeText= (TextView)findViewById(R.id.alarmTextView);
+        tripName=(EditText)findViewById(R.id.tripName);
+        startPoint=(EditText)findViewById(R.id.startPoint);
+        endPoint=(EditText)findViewById(R.id.endPoint);
+        addBtn=(Button)findViewById(R.id.btn_add);
+        single = findViewById(R.id.single_trip);
+        round = findViewById(R.id.round_trip);
+        dateBackText= (TextView)findViewById(R.id.date_back);
+        timeBackText= (TextView)findViewById(R.id.alarm_back);
+        btnDateBack= (ImageView) findViewById(R.id.calender_btn_back);
+        btnTimeBack= (ImageView) findViewById(R.id.alarm_btn_back);
+        round_details=(LinearLayout) findViewById(R.id.round_layout);
+        trip_type=(LinearLayout) findViewById(R.id.tripTypeLayout);
+        toolBar=(Toolbar) findViewById(R.id.toolbar);
+
+        viewModel= ViewModelProviders.of(this).get(TripsViewModel.class);
+    }
     private void setTime(){
+        btnTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myCalendar.set(Calendar.SECOND,0);
+                mTimePicker.setTitle("Select Time");
+                mTimePicker.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                mTimePicker.show();
+            }
+        });
         mTimePicker = new TimePickerDialog(addTripActivity.this,android.R.style.Theme_Holo_Light_Dialog_MinWidth, new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
@@ -495,18 +401,26 @@ public class addTripActivity extends AppCompatActivity  {
             myCalendar.set(Calendar.MINUTE,selectedMinute);
             isTimeSelect=true;
             String chosenTime = DateFormat.getTimeInstance().format(myCalendar.getTime());
-           // Log.i("ola",chosenTime);
-
             timeText.setText(chosenTime);
             btnTime.setColorFilter(getResources().getColor(R.color.purbleApp), PorterDuff.Mode.SRC_ATOP);
 
         }
-    }, hour, minute, android.text.format.DateFormat.is24HourFormat(getApplicationContext()));//Yes 24 hour time
-        mTimePicker.setTitle("Select Time");
-        mTimePicker.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        mTimePicker.show();}
+    }, myCurrentCalendar.get(Calendar.HOUR_OF_DAY),  myCurrentCalendar.get(Calendar.MINUTE), android.text.format.DateFormat.is24HourFormat(getApplicationContext()));//Yes 24 hour time
+       }
     private void setBackTime(){
-        mTimePicker = new TimePickerDialog(addTripActivity.this,android.R.style.Theme_Holo_Light_Dialog_MinWidth, new TimePickerDialog.OnTimeSetListener() {
+        btnTimeBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isTimeSelect) {
+                    mTimePickerBack.setTitle("Select Time");
+                    mTimePickerBack.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    mTimePickerBack.show();
+                }
+                else
+                    Toast.makeText(addTripActivity.this, "set the start Time ", Toast.LENGTH_LONG).show();
+            }
+        });
+        mTimePickerBack = new TimePickerDialog(addTripActivity.this,android.R.style.Theme_Holo_Light_Dialog_MinWidth, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                 backCalendar.set(Calendar.HOUR_OF_DAY,selectedHour);
@@ -517,10 +431,8 @@ public class addTripActivity extends AppCompatActivity  {
                 btnTimeBack.setColorFilter(getResources().getColor(R.color.purbleApp), PorterDuff.Mode.SRC_ATOP);
 
             }
-        }, hour, minute, android.text.format.DateFormat.is24HourFormat(getApplicationContext()));//Yes 24 hour time
-        mTimePicker.setTitle("Select Time");
-        mTimePicker.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        mTimePicker.show();}
+        }, myCurrentCalendar.get(Calendar.HOUR_OF_DAY),  myCurrentCalendar.get(Calendar.MINUTE), android.text.format.DateFormat.is24HourFormat(getApplicationContext()));//Yes 24 hour time
+      }
     private boolean validateTime(){
         Calendar myCurrentCalendar=Calendar.getInstance();
         try {
@@ -553,4 +465,77 @@ public class addTripActivity extends AppCompatActivity  {
             return true;
 
     }
+    private void setDate(){
+        DatePickerDialog.OnDateSetListener datePicker = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                dateBackText.setText("");
+                btnDateBack.setColorFilter(getResources().getColor(R.color.gray), PorterDuff.Mode.SRC_ATOP);
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                isDateSelect=true;
+                try {
+                    currentDate = dateFormant.parse(dateFormant.format(myCurrentCalendar.getTime()));
+                    selectedDate = dateFormant.parse(dateFormant.format(myCalendar.getTime()));
+                    if (currentDate.before(selectedDate) || currentDate.equals(selectedDate)) {
+                        btnDate.setColorFilter(getResources().getColor(R.color.purbleApp), PorterDuff.Mode.SRC_ATOP);
+                        dateText.setText( dateFormant.format(myCalendar.getTime()));
+                    } else
+                        Toast.makeText(addTripActivity.this, "Set valid date", Toast.LENGTH_LONG).show();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        btnDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog datePickerDialog= new DatePickerDialog(addTripActivity.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, datePicker, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                datePickerDialog.setTitle("Select Date");
+                datePickerDialog.show();
+
+            }
+        });
+    }
+    private void setBackDate(){
+        DatePickerDialog.OnDateSetListener dateBackPicker = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                backCalendar.set(Calendar.YEAR, year);
+                backCalendar.set(Calendar.MONTH, monthOfYear);
+                backCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                try {
+                    selectedBackDate = dateFormant.parse(dateFormant.format(backCalendar.getTime()));
+                    selectedDate = dateFormant.parse(dateFormant.format(myCalendar.getTime()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if (selectedDate.before(selectedBackDate) || selectedDate.equals(selectedBackDate)) {
+                    btnDateBack.setColorFilter(getResources().getColor(R.color.purbleApp), PorterDuff.Mode.SRC_ATOP);
+                    dateBackText.setText(dateFormant.format(backCalendar.getTime()));
+                } else
+                    Toast.makeText(addTripActivity.this, "Set valid date", Toast.LENGTH_LONG).show();
+            }
+        };
+        btnDateBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isDateSelect) {
+                    DatePickerDialog datePickerDialog = new DatePickerDialog(addTripActivity.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, dateBackPicker, backCalendar
+                            .get(Calendar.YEAR), backCalendar.get(Calendar.MONTH),
+                            backCalendar.get(Calendar.DAY_OF_MONTH));
+                    datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    datePickerDialog.setTitle("Select Date");
+                    datePickerDialog.show();
+                }
+                else
+                    Toast.makeText(addTripActivity.this, "set the start date ", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
 }

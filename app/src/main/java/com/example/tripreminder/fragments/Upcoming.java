@@ -1,6 +1,5 @@
 package com.example.tripreminder.fragments;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -9,14 +8,10 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
-import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,62 +19,38 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
-import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.tripreminder.MainActivity;
 import com.example.tripreminder.R;
-import com.example.tripreminder.SignUp;
 import com.example.tripreminder.adapters.UpcomingTripAdapter;
 import com.example.tripreminder.adapters.notesAdapter;
 import com.example.tripreminder.addTripActivity;
-import com.example.tripreminder.beans.TripListener;
+import com.example.tripreminder.adapters.TripListener;
 import com.example.tripreminder.beans.Trips;
 import com.example.tripreminder.bubbleService;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.TextView;
 
-
-import com.example.tripreminder.DialogActivity;
 
 import com.example.tripreminder.NotificationReceiver;
-import com.example.tripreminder.R;
-import com.example.tripreminder.adapters.UpcomingTripAdapter;
-import com.example.tripreminder.addTripActivity;
-import com.example.tripreminder.beans.TripListener;
-import com.example.tripreminder.beans.Trips;
-import com.example.tripreminder.adapters.notesAdapter;
 import com.example.tripreminder.roomDB.TripsViewModel;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import static com.example.tripreminder.DialogActivity.notificationIntentKey;
 import static android.app.Activity.RESULT_OK;
 import static java.lang.Double.parseDouble;
-
-import static com.example.tripreminder.DialogActivity.notificationIntentKey;
 
 public class Upcoming extends Fragment {
 
@@ -94,6 +65,9 @@ public class Upcoming extends Fragment {
     private int MY_PERMISSION = 100;
     double endLatitude;
     double endLongitude;
+    private TextView msg;
+    LottieAnimationView animationView;
+
     public Upcoming() {
         // Required empty public constructor
     }
@@ -106,29 +80,27 @@ public class Upcoming extends Fragment {
         noteList=new ArrayList<>();
 
         recyclerView=view.findViewById(R.id.recView);
+        msg=view.findViewById(R.id.msg);
+         animationView = view.findViewById(R.id.animationView);
 
         adapter=new UpcomingTripAdapter(menuItemListener);
         recyclerView.setAdapter(adapter);
-
 
         viewModel= ViewModelProviders.of(this).get(TripsViewModel.class);
         viewModel.getAllTrips().observe(getViewLifecycleOwner(), new Observer<List<Trips>>() {
             @Override
             public void onChanged(List<Trips> trips) {
                 List<Trips> upcomingTrips=new ArrayList<>();
-                for (Trips t:trips) {
-                    if(t.getStatus()==0) {
-                        upcomingTrips.add(t);
-                        Log.i("ola", "up" + t);
+                    for (Trips t:trips) {
+                        if (t.getStatus() == 0) {
+                            upcomingTrips.add(t);
+                        }
                     }
-                    else{
-                        Log.i("ola", "his" + t);
-                    }
+                    adapter.saveTrips(upcomingTrips);
+                    if(upcomingTrips.size()==0){msg.setVisibility(View.VISIBLE);animationView.setVisibility(View.VISIBLE);}
+                    else { msg.setVisibility(View.INVISIBLE); animationView.setVisibility(View.INVISIBLE); }
                 }
-                adapter.saveTrips(upcomingTrips);
-                Log.i("note","ol  "+trips.toString());
                 //Toast.makeText(getContext(), "Added Successfully", Toast.LENGTH_LONG).show();
-            }
         });
 
     }
@@ -136,7 +108,6 @@ public class Upcoming extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        //Toast.makeText(getContext(), "elsize "+adapter.getTrips().size(), Toast.LENGTH_SHORT).show();
         for (int i=0;i<adapter.getTrips().size();i++){
             Log.e("Upcoming",adapter.getTrips().get(i).getDate()+"#@#@"+adapter.getTrips().get(i).getTime());
         }
@@ -165,7 +136,6 @@ public class Upcoming extends Fragment {
                 intent.putExtra(addTripActivity.TRIP_OBJ, trip);
                 intent.putExtra(addTripActivity.TRIP_ID,trip.getId());
                 startActivity(intent);
-               // Toast.makeText(getContext(), "you clicked on edit", Toast.LENGTH_SHORT).show();
                 cancelAlarm(trip.getId());
 
             }
@@ -201,8 +171,6 @@ public class Upcoming extends Fragment {
                    };
                    th.start();
                    startGoogleActivityFromFragment();
-
-
             }
 
             @Override
@@ -211,19 +179,14 @@ public class Upcoming extends Fragment {
                 cancelAlarm(7);
                 viewModel.update(trip);
                cancelAlarm(trip.getId());
-
             }
-
             @Override
             public void showNote(Trips trip){
                 noteList=trip.getNotesList();
                 showDialog(getActivity(),trip);
-
             }
-
         };
     }
-
     public void startGoogleActivityFromFragment() {
         String url = "http://maps.google.com/maps?saddr=" + MainActivity.latitude + "," + MainActivity.longitude+ "&daddr=" + endLatitude+ "," + endLongitude;
         Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(url));
@@ -292,6 +255,7 @@ public class Upcoming extends Fragment {
                 addNoteBtn.setVisibility(View.GONE);
                 notetxt.setVisibility(View.VISIBLE);
                 saveNoteBtn.setVisibility(View.VISIBLE);
+                notetxt.setEnabled(true);
             }
         });
         saveNoteBtn.setOnClickListener(new View.OnClickListener() {
@@ -304,6 +268,7 @@ public class Upcoming extends Fragment {
                 adapterRe.notifyDataSetChanged();
                 notetxt.setVisibility(View.GONE);
                 notetxt.setText("");
+                notetxt.setEnabled(false);
                 saveNoteBtn.setVisibility(View.GONE);
                 addNoteBtn.setVisibility(View.VISIBLE);
 

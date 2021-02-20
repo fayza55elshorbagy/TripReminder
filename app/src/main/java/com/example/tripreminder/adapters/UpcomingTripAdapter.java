@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tripreminder.R;
-import com.example.tripreminder.beans.TripListener;
 import com.example.tripreminder.beans.Trips;
 
 import java.lang.reflect.Field;

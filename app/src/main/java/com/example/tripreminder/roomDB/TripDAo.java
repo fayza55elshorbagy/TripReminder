@@ -17,8 +17,7 @@ public interface TripDAo {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<Trips> trips);
-
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insert( Trips trips);
     @Update
     Void update( Trips trips);
@@ -43,6 +42,9 @@ public interface TripDAo {
     @Query("select * From Trips where Id =:tId")
     Trips getTripById(long tId);
 
+
+    @Query("UPDATE  Trips SET status=:tStatus where Id =:tId")
+    void updateStatus(int tStatus,int tId);
 
 
 

@@ -75,7 +75,7 @@ public class DialogActivity extends AppCompatActivity {
         mp.start();
         mp.setLooping(true);
         alertDialog.setCancelable(false);
-        Handler cancelHandler=new Handler(){
+        Handler handler=new Handler(){
             @Override
             public void handleMessage(@NonNull Message msg) {
                 super.handleMessage(msg);
@@ -87,17 +87,12 @@ public class DialogActivity extends AppCompatActivity {
         alertDialog.setTitle("Reminder").setMessage("Do You want to start your trip titled: "+l.getName()).setPositiveButton("start", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
                     endLatitude = parseDouble(l.getEndLat());
                     endLongitude = parseDouble(l.getEndLng());
-                    Log.i("click",endLatitude+"+++++++"+endLongitude);
                     new Thread()
                     {   public void run() {
-                        Trips trip=new Trips(l.getName(),l.getStartPoint(),l.getEndPoint(),2,l.getType(),l.getTime(),l.getDate(),l.getNotes());
-                        trip.setId((int) TrripId);
-                        viewModel.update(trip);
-                        Log.i("insert","alarm1"+l.getId()+"name"+l.getName()+"status"+l.getStatus());
-                        cancelHandler.sendEmptyMessage(0);
+                        viewModel.updateStatus(2,(int) TrripId);
+                        handler.sendEmptyMessage(0);
                     }
                     }.start();
 
@@ -117,8 +112,6 @@ public class DialogActivity extends AppCompatActivity {
                     };
                     splash.start();
 
-
-
                 startGoogleActivityFromdialog();
                 //Toast.makeText(DialogActivity.this, "you've clicked start", Toast.LENGTH_SHORT).show();
             }
@@ -128,12 +121,9 @@ public class DialogActivity extends AppCompatActivity {
                try {
                    Trips l=viewModel.getTripById(TrripId);
                            new Thread()
-                           {       public void run() {
-                                   Trips trip=new Trips(l.getName(),l.getStartPoint(),l.getEndPoint(),1,l.getType(),l.getTime(),l.getDate(),l.getNotes());
-                                   trip.setId((int) TrripId);
-                                   viewModel.update(trip);
-                                   Log.i("insert","alarm1"+l.getId()+"name"+l.getName()+"status"+l.getStatus());
-                                   cancelHandler.sendEmptyMessage(0);
+                           {     public void run() {
+                                 viewModel.updateStatus(1,(int) TrripId);
+                                 handler.sendEmptyMessage(0);
                                }
                            }.start();
 
@@ -150,10 +140,8 @@ public class DialogActivity extends AppCompatActivity {
                // Toast.makeText(DialogActivity.this, "you've clicked snooze", Toast.LENGTH_SHORT).show();
                 new Thread()
                 {   public void run() {
-                    Trips trip=new Trips(l.getName(),l.getStartPoint(),l.getEndPoint(),5,l.getType(),l.getTime(),l.getDate(),l.getNotes());
-                    trip.setId((int) TrripId);
-                    viewModel.update(trip);
-                    cancelHandler.sendEmptyMessage(0);
+                    viewModel.updateStatus(5,(int) TrripId);
+                    handler.sendEmptyMessage(0);
                 }
                 }.start();
                 showNotification();
@@ -235,8 +223,8 @@ public class DialogActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //stopService(new Intent(this,bubbleService.class));
+    protected void onStop() {
+        super.onStop();
+
     }
 }

@@ -42,6 +42,10 @@ public class TripRepo {
         {
             new UpdateAsyncTask(mTripDao).execute(trips);
         }
+       //updateStatus
+        public void updateStatus(int status ,int tid) {
+        new UpdateStatusAsyncTask(mTripDao).execute(status,tid);
+    }
         //getalltrips
         public LiveData<List<Trips>> getAllTrips()
         {
@@ -58,24 +62,9 @@ public class TripRepo {
         public Trips getTripById(long id)throws ExecutionException, InterruptedException { return new GetByIdsAsyncTask(mTripDao).execute(id).get(); }
         // get done trips
         public List<Trips> getDoneTrips()throws ExecutionException, InterruptedException { return new GetDoneTripssAsyncTask(mTripDao).execute().get(); }
-    //get upcoming
-    public List<Trips> getUpcoming()throws ExecutionException, InterruptedException { return new GetUpcomingAsyncTask(mTripDao).execute().get(); }
+       //get upcoming
+        public List<Trips> getUpcoming()throws ExecutionException, InterruptedException { return new GetUpcomingAsyncTask(mTripDao).execute().get(); }
 
-    /* private static class InsertAsyncTask extends AsyncTask<Trips, Void, Void> {
-    private TripDAo minfoDao;
-    public InsertAsyncTask(TripDAo tripDao)
-    {
-        minfoDao = tripDao;
-    }
-    @Override
-    protected Void doInBackground(Trips... trips) {
-        id= minfoDao.insert(trips[0]);
-        return null;
-
-
-    }
-
-}*/
     private static class DeleteAsyncTask extends AsyncTask<Trips, Void, Void>{
     private TripDAo minfoDao;
     public DeleteAsyncTask(TripDAo tripDao)
@@ -100,6 +89,19 @@ public class TripRepo {
         return null;
     }
 }
+    private static class UpdateStatusAsyncTask<Int> extends AsyncTask<Object, Void, Void>{
+        private TripDAo minfoDao;
+        public UpdateStatusAsyncTask(TripDAo tripDao)
+        {
+            minfoDao = tripDao;
+        }
+
+        @Override
+        protected Void doInBackground(Object... objects) {
+            minfoDao.updateStatus((Integer)objects[0],(Integer)objects[1]);
+            return null;
+        }
+    }
     private static class DeleteAllTripsAsyncTask extends AsyncTask<Void, Void, Void>{
     private TripDAo mTripsDao;
     public DeleteAllTripsAsyncTask(TripDAo tripDao)

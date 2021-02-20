@@ -212,7 +212,7 @@ public class Trips implements Serializable {
         //Log.i("ola","ttttime:"+time+"  "+ mtime[0]);
         Calendar myCalendar = Calendar.getInstance();
         myCalendar.set(Calendar.YEAR, Integer.parseInt(mdate[2]));
-        myCalendar.set(Calendar.MONTH, Integer.parseInt(mdate[1]));
+        myCalendar.set(Calendar.MONTH, Integer.parseInt(mdate[1])-1);
         myCalendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(mdate[0]));
         myCalendar.set(Calendar.HOUR_OF_DAY,Integer.parseInt(mtime[0]));
         myCalendar.set(Calendar.MINUTE,Integer.parseInt(mtime[1]));

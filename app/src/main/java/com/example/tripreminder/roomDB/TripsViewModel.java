@@ -33,6 +33,9 @@ public class TripsViewModel extends AndroidViewModel {
     public void update(Trips trips) {
         mRepository.update(trips);
     }
+    public void updateStatus(int status,int id) {
+        mRepository.updateStatus(status,id);
+    }
     public void deleteAllTrips() {
         mRepository.deleteAllTrips();
     }

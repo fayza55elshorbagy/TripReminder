@@ -10,21 +10,15 @@
                 android:bottom="4dp"
                 />
 
-            <gradient android:startColor="#00c4c7a9" android:endColor="#00d6dadf" android:angle="270" />
-
-            <stroke android:width="2px" android:color="@color/purbleApp" />
-            <corners android:radius="2dp" />
+            <solid android:color="#E4E4E4" />
+            <corners android:radius="150dp" />
         </shape>
     </item>
 
     <item android:state_focused="false">
         <shape android:shape="rectangle">
-
-
-            <gradient android:startColor="#00c4c7a9" android:endColor="#00d6dadf" android:angle="270" />
-
-            <stroke  android:width="2px" android:color="@color/purbleApp" />
-            <corners android:radius="2dp" />
+            <solid android:color="#E4E4E4" />
+            <corners android:radius="150dp" />
 
         </shape>
     </item>

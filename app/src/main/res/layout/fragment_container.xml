@@ -4,14 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/background"
     >
-
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_app">
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="123dp" />
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addBtn"
             android:layout_width="wrap_content"
@@ -57,19 +60,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Trips"
+            android:layout_marginEnd="40dp"
             android:textColor="@color/yellowApp"
             android:textSize="25dp"
-            android:layout_margin="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
             android:textStyle="bold"
             android:padding="10dp"
             android:layout_alignTop="@+id/title"
             android:layout_alignParentEnd="true" />
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/fragmentContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="72dp" />
+
         <ProgressBar
             android:id="@+id/progressBar_up"
             style="?android:attr/progressBarStyle"
@@ -79,5 +81,4 @@
             android:layout_marginBottom="100dp"
             android:visibility="invisible" />
     </RelativeLayout>
-
 </LinearLayout>

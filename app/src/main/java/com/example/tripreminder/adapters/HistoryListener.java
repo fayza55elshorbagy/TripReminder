@@ -1,4 +1,6 @@
-package com.example.tripreminder.beans;
+package com.example.tripreminder.adapters;
+
+import com.example.tripreminder.beans.Trips;
 
 public interface HistoryListener {
     void delete(Trips trip);
